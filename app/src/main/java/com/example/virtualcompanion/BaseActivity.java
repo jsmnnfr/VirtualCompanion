@@ -6,6 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
 
+    // ===============================
+    // GLOBAL EQUIPPED ITEMS
+    // ===============================
+
+    protected static int equippedTop = 0;
+    protected static int equippedBottom = 0;
+    protected static int equippedHat = 0;
+    protected static int equippedGlasses = 0;
+
+
+    // ===============================
+    // MUSIC
+    // ===============================
+
     @Override
     protected void onResume() {
         super.onResume();
