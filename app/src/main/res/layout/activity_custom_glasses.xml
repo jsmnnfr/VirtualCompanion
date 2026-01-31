@@ -243,6 +243,13 @@
             android:scaleType="fitCenter"
             android:visibility="gone" />
 
+        <!-- GLASSES (TOPMOST) -->
+        <ImageView
+            android:id="@+id/glassesLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:visibility="gone" />
 
         <!-- HAT -->
         <ImageView
@@ -252,14 +259,6 @@
             android:scaleType="fitCenter"
             android:visibility="gone" />
 
-
-        <!-- GLASSES (TOPMOST) -->
-        <ImageView
-            android:id="@+id/glassesLayer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitCenter"
-            android:visibility="gone" />
 
     </FrameLayout>
 
