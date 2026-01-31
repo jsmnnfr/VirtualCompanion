@@ -196,6 +196,43 @@
             android:adjustViewBounds="true"
             android:src="@drawable/emotion_neutral" />
 
+        <!-- Outfit Layers -->
+        <ImageView
+            android:id="@+id/bottomLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Bottom Clothing"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/topLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Top Clothing"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/hatLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Hat"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/glassesLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="Glasses"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <!-- Mood Message - Below pet -->

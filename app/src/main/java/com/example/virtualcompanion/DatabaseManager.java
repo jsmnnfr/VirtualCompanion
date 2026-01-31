@@ -54,6 +54,16 @@ public class DatabaseManager {
 
         if (c.moveToFirst()) {
             coins = c.getInt(0);
+        } else {
+            // No user found, create default user
+            c.close();
+            SQLiteDatabase writeDb = helper.getWritableDatabase();
+            writeDb.execSQL(
+                "INSERT INTO user (name, coins, pet_gender) " +
+                "VALUES ('Iggy',150,'male');"
+            );
+            coins = 150;
+            return coins;
         }
 
         c.close();

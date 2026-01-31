@@ -46,6 +46,9 @@ public class QuestsActivity extends BaseActivity {
         // Setup navigation
         setupBottomNavigation();
         setupSettingsButton();
+        
+        // Update coin display
+        updateCoinDisplay();
     }
 
     // Find all views
@@ -58,6 +61,26 @@ public class QuestsActivity extends BaseActivity {
         navCustomize = findViewById(R.id.navCustomize);
 
         settingsIcon = findViewById(R.id.settingsIcon);
+    }
+    
+    private void updateCoinDisplay() {
+        android.widget.TextView coinAmount = findViewById(R.id.coinAmount);
+        if (coinAmount != null) {
+            try {
+                int coins = DatabaseManager.get(this).getCoins();
+                coinAmount.setText(String.valueOf(coins));
+            } catch (Exception e) {
+                coinAmount.setText("0");
+            }
+            
+            // CHEAT MODE: Long press to add 100 coins
+            coinAmount.setOnLongClickListener(v -> {
+                DatabaseManager.get(this).addCoins(100);
+                updateCoinDisplay();
+                Toast.makeText(this, "[DEV] +100 coins added", Toast.LENGTH_SHORT).show();
+                return true;
+            });
+        }
     }
 
     // Setup RecyclerView + Adapter

@@ -26,7 +26,7 @@ public class ShopItemAdapter
 
     // CLICK INTERFACE
     public interface OnItemClickListener {
-        void onItemClick(int equipResId);
+        void onItemClick(int equipResId, int position);
     }
 
 
@@ -69,15 +69,22 @@ public class ShopItemAdapter
                 shopImages[position]
         );
 
-        holder.itemPrice.setText(prices[position]);
+        // Check if item is owned and hide price if so
+        int equipRes = equipImages[position];
+        boolean isOwned = InventoryManager.isOwned(holder.itemView.getContext(), equipRes);
+        
+        if (isOwned || prices[position].isEmpty()) {
+            holder.itemPrice.setVisibility(View.GONE);
+        } else {
+            holder.itemPrice.setVisibility(View.VISIBLE);
+            holder.itemPrice.setText(prices[position]);
+        }
 
 
         holder.itemView.setOnClickListener(v -> {
 
-            int equipRes = equipImages[position];
-
             if (listener != null) {
-                listener.onItemClick(equipRes);
+                listener.onItemClick(equipRes, position);
             }
         });
     }

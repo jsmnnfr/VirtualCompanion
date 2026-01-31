@@ -110,7 +110,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // Default user
         db.execSQL(
                 "INSERT INTO user (name, coins, pet_gender) " +
-                        "VALUES ('Iggy',150,'neutral');"
+                        "VALUES ('Iggy',150,'male');"
         );
     }
 
