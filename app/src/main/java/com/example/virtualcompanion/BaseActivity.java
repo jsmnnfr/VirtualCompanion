@@ -1,24 +1,11 @@
 package com.example.virtualcompanion;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class BaseActivity extends AppCompatActivity {
-
-    // ===============================
-    // GLOBAL EQUIPPED ITEMS
-    // ===============================
-
-    protected static int equippedTop = 0;
-    protected static int equippedBottom = 0;
-    protected static int equippedHat = 0;
-    protected static int equippedGlasses = 0;
-
-
-    // ===============================
-    // MUSIC
-    // ===============================
 
     @Override
     protected void onResume() {
@@ -26,5 +13,33 @@ public class BaseActivity extends AppCompatActivity {
 
         // Always ensure music is running
         MusicManager.startMusic(this);
+
+        // Apply pet name to title
+        applyPetNameToTitle();
     }
-} 
+
+    private void applyPetNameToTitle() {
+
+        // Keep ECHO in Opening & Settings
+        if (this instanceof OpeningActivity ||
+                this instanceof SettingsActivity) {
+            return;
+        }
+
+        TextView title = findViewById(R.id.appTitle);
+        if (title == null) return;
+
+        DatabaseManager db = DatabaseManager.get(this);
+        String name = db.getName();
+
+        if (name != null && !name.trim().isEmpty()) {
+
+            // FORCE UPPERCASE
+            title.setText(name.toUpperCase());
+
+        } else {
+
+            title.setText("ECHO");
+        }
+    }
+}

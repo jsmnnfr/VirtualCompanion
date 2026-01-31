@@ -255,7 +255,7 @@ public class CustomBottomActivity extends BaseActivity {
             h.setOnClickListener(v ->
                     startActivity(new Intent(
                             this,
-                            MoodActivity.class)));
+                            MoodResultActivity.class)));
         }
 
         if (q != null) {

@@ -286,7 +286,7 @@ public class CustomTopActivity extends BaseActivity {
             navHome.setOnClickListener(v ->
                     startActivity(new Intent(
                             this,
-                            MoodActivity.class)));
+                            MoodResultActivity.class)));
         }
 
         if (navQuests != null) {
