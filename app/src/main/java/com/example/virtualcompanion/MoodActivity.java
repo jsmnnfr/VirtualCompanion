@@ -143,6 +143,29 @@ public class MoodActivity extends BaseActivity {
                 Toast.makeText(MoodActivity.this, "Please set your mood first", Toast.LENGTH_SHORT).show();
             });
         }
+        
+        // Update coin display
+        updateCoinDisplay();
+    }
+    
+    private void updateCoinDisplay() {
+        android.widget.TextView coinAmount = findViewById(R.id.coinAmount);
+        if (coinAmount != null) {
+            try {
+                int coins = DatabaseManager.get(this).getCoins();
+                coinAmount.setText(String.valueOf(coins));
+            } catch (Exception e) {
+                coinAmount.setText("0");
+            }
+            
+            // CHEAT MODE: Long press to add 100 coins
+            coinAmount.setOnLongClickListener(v -> {
+                DatabaseManager.get(this).addCoins(100);
+                updateCoinDisplay();
+                Toast.makeText(this, "[DEV] +100 coins added", Toast.LENGTH_SHORT).show();
+                return true;
+            });
+        }
     }
 
     /**

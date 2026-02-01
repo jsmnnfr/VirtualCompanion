@@ -16,9 +16,11 @@ public class CustomGlassesActivity extends BaseActivity {
     private ImageView topLayer, bottomLayer, hatLayer, glassesLayer;
 
     private TextView equipButton;
+    private TextView coinDisplay;
 
     // Selected preview
     private int selectedPreview = 0;
+    private int selectedPrice = 0;
 
 
     @Override
@@ -36,6 +38,7 @@ public class CustomGlassesActivity extends BaseActivity {
         glassesLayer = findViewById(R.id.glassesLayer);
 
         equipButton = findViewById(R.id.equipButton);
+        coinDisplay = findViewById(R.id.coinAmount);
 
 
         // ================= RECYCLER =================
@@ -83,6 +86,16 @@ public class CustomGlassesActivity extends BaseActivity {
                 "180"
         };
 
+        int[] priceValues = {
+                0, 0, 0, 150, 180
+        };
+
+        // Initialize free items (price = 0)
+        InventoryManager.initDefaults(this, new int[]{
+                R.drawable.glasses_normal_1,
+                R.drawable.glasses_shades_1
+        });
+
 
         // ================= ADAPTER =================
 
@@ -93,10 +106,11 @@ public class CustomGlassesActivity extends BaseActivity {
                         equipImages,
                         prices,
 
-                        resId -> {
+                        (resId, position) -> {
 
                             // PREVIEW
                             selectedPreview = resId;
+                            selectedPrice = priceValues[position];
 
                             if (resId == 0) {
 
@@ -119,26 +133,40 @@ public class CustomGlassesActivity extends BaseActivity {
 
         equipButton.setOnClickListener(v -> {
 
-            int equipped =
-                    OutfitManager.getGlasses(this);
+            int equipped = OutfitManager.getGlasses(this);
 
-
-            // UNEQUIP
-            if (selectedPreview == equipped) {
-
-                OutfitManager.setGlasses(this, 0);
-
-                glassesLayer.setVisibility(View.GONE);
-
-                equipButton.setText("Equip");
-
+            // Check if owned
+            if (!InventoryManager.isOwned(this, selectedPreview)) {
+                // PURCHASE
+                try {
+                    int coins = DatabaseManager.get(this).getCoins();
+                    
+                    if (coins >= selectedPrice) {
+                        DatabaseManager.get(this).addCoins(-selectedPrice);
+                        InventoryManager.addItem(this, selectedPreview);
+                        adapter.notifyDataSetChanged();
+                        updateCoinDisplay();
+                        updateEquipText();
+                        android.widget.Toast.makeText(this, "Purchased!", android.widget.Toast.LENGTH_SHORT).show();
+                    } else {
+                        android.widget.Toast.makeText(this, "Not enough coins!", android.widget.Toast.LENGTH_SHORT).show();
+                    }
+                } catch (Exception e) {
+                    android.widget.Toast.makeText(this, "Error: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
+                }
                 return;
             }
 
+            // UNEQUIP
+            if (selectedPreview == equipped) {
+                OutfitManager.setGlasses(this, 0);
+                glassesLayer.setVisibility(View.GONE);
+                equipButton.setText("Equip");
+                return;
+            }
 
             // EQUIP
             OutfitManager.setGlasses(this, selectedPreview);
-
             equipButton.setText("Unequip");
         });
 
@@ -147,6 +175,8 @@ public class CustomGlassesActivity extends BaseActivity {
 
         restoreAll();
 
+        // Update coin display
+        updateCoinDisplay();
 
         // ================= UI =================
 
@@ -199,18 +229,40 @@ public class CustomGlassesActivity extends BaseActivity {
     // ================= EQUIP TEXT =================
 
     private void updateEquipText() {
+        if (equipButton == null) return;
+        
+        int equipped = OutfitManager.getGlasses(this);
 
-        int equipped =
-                OutfitManager.getGlasses(this);
+        // Check if item is owned
+        if (!InventoryManager.isOwned(this, selectedPreview)) {
+            equipButton.setText("Buy - " + selectedPrice + " coins");
+            return;
+        }
 
-        if (selectedPreview == equipped &&
-                equipped != 0) {
-
+        // If owned, check if equipped
+        if (selectedPreview == equipped && equipped != 0) {
             equipButton.setText("Unequip");
-
         } else {
-
             equipButton.setText("Equip");
+        }
+    }
+
+    private void updateCoinDisplay() {
+        if (coinDisplay != null) {
+            try {
+                int coins = DatabaseManager.get(this).getCoins();
+                coinDisplay.setText(String.valueOf(coins));
+            } catch (Exception e) {
+                coinDisplay.setText("150");
+            }
+            
+            // CHEAT MODE: Long press to add 100 coins
+            coinDisplay.setOnLongClickListener(v -> {
+                DatabaseManager.get(this).addCoins(100);
+                updateCoinDisplay();
+                android.widget.Toast.makeText(this, "[DEV] +100 coins added", android.widget.Toast.LENGTH_SHORT).show();
+                return true;
+            });
         }
     }
 
@@ -226,24 +278,30 @@ public class CustomGlassesActivity extends BaseActivity {
 
 
         if (cat1 != null) {
-            cat1.setOnClickListener(v ->
+            cat1.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            CustomTopActivity.class)));
+                            CustomTopActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
         if (cat2 != null) {
-            cat2.setOnClickListener(v ->
+            cat2.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            CustomBottomActivity.class)));
+                            CustomBottomActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
         if (cat3 != null) {
-            cat3.setOnClickListener(v ->
+            cat3.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            CustomHatActivity.class)));
+                            CustomHatActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
     }
 
@@ -256,10 +314,12 @@ public class CustomGlassesActivity extends BaseActivity {
                 findViewById(R.id.settingsIcon);
 
         if (settings != null) {
-            settings.setOnClickListener(v ->
+            settings.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            SettingsActivity.class)));
+                            SettingsActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
     }
 
@@ -273,17 +333,21 @@ public class CustomGlassesActivity extends BaseActivity {
 
 
         if (navHome != null) {
-            navHome.setOnClickListener(v ->
+            navHome.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            MoodResultActivity.class)));
+                            MoodResultActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
         if (navQuests != null) {
-            navQuests.setOnClickListener(v ->
+            navQuests.setOnClickListener(v -> {
                     startActivity(new Intent(
                             this,
-                            QuestsActivity.class)));
+                            QuestsActivity.class));
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
     }
 }
