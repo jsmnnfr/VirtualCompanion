@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "virtual_companion.db";
 
     // Change this if you modify tables later
-    private static final int DB_VERSION = 2;
+    private static final int DB_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -80,8 +80,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "description TEXT, " +
                         // Coins reward
                         "reward INTEGER NOT NULL DEFAULT 0, " +
+                        "progress INTEGER NOT NULL DEFAULT 0, " +
                         // 0 = not done, 1 = done
-                        "done INTEGER NOT NULL DEFAULT 0 CHECK (done IN (0,1))" +
+                        "rewarded INTEGER NOT NULL DEFAULT 0 CHECK (rewarded IN (0,1))" +
                         ");"
         );
 
@@ -106,11 +107,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Insert starting data (runs once)
      */
     private void insertDefaults(SQLiteDatabase db) {
-
-        // Default user
+        db.execSQL("INSERT INTO user (name, coins, pet_gender) VALUES ('Iggy',150,'male');");
         db.execSQL(
-                "INSERT INTO user (name, coins, pet_gender) " +
-                        "VALUES ('Iggy',150,'male');"
+                "INSERT INTO quest (title, description, reward, progress, rewarded) VALUES " +
+                        "('Breathing Exercise','Guided deep breathing for stress relief',50,0,0)," +
+                        "('Hydration Reminder','Encouraging water intake for physical wellness',30,0,0)," +
+                        "('Movement Break','Gentle stretching to release tension',40,0,0)," +
+                        "('Positive Reflection','Write one thing you are grateful for or proud of',60,0,0)," +
+                        "('Grounding Technique','Simple mindfulness exercises',25,0,0);"
         );
     }
 

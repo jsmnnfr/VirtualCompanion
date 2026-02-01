@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * DatabaseManager
  *
@@ -170,4 +173,81 @@ public class DatabaseManager {
                 new Object[]{value, date}
         );
     }
+
+    /**
+     * Get latest saved mood (0–4)
+     */
+    public int getLatestMood() {
+
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        Cursor c = db.rawQuery(
+                "SELECT value FROM mood ORDER BY date DESC LIMIT 1",
+                null
+        );
+
+        int moodIndex = 0; // default = Neutral
+
+        if (c.moveToFirst()) {
+            moodIndex = c.getInt(0) - 1; // convert 1–5 → 0–4
+        }
+
+        c.close();
+        return Math.max(0, Math.min(moodIndex, 4));
+    }
+
+
+    // ================= QUEST =================
+    public List<Quest> getAllQuests() {
+        List<Quest> questList = new ArrayList<>();
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT id, title, description, reward, progress, rewarded FROM quest", null);
+
+        if (c.moveToFirst()) {
+            do {
+                int id = c.getInt(0);
+                String title = c.getString(1);
+                String desc = c.getString(2);
+                int reward = c.getInt(3);
+                int progress = c.getInt(4);
+                boolean rewarded = c.getInt(5) == 1;
+
+                Quest quest = new Quest(id, title, desc, reward);
+                quest.setProgress(progress);
+                quest.setRewarded(rewarded);
+                questList.add(quest);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return questList;
+    }
+
+    public int getQuestProgress(int questId) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT progress FROM quest WHERE id=?", new String[]{String.valueOf(questId)});
+        int progress = 0;
+        if (c.moveToFirst()) progress = c.getInt(0);
+        c.close();
+        return progress;
+    }
+
+    public void updateQuestProgress(int questId, int progress) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("UPDATE quest SET progress=? WHERE id=?", new Object[]{progress, questId});
+    }
+
+    public boolean isQuestRewarded(int questId) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+        Cursor c = db.rawQuery("SELECT rewarded FROM quest WHERE id=?", new String[]{String.valueOf(questId)});
+        boolean rewarded = false;
+        if (c.moveToFirst()) rewarded = c.getInt(0) == 1;
+        c.close();
+        return rewarded;
+    }
+
+    public void markQuestRewarded(int questId) {
+        SQLiteDatabase db = helper.getWritableDatabase();
+        db.execSQL("UPDATE quest SET rewarded=1 WHERE id=?", new Object[]{questId});
+    }
 }
+

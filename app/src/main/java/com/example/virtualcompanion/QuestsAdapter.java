@@ -4,9 +4,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
+
 import java.util.List;
 
 public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewHolder> {
@@ -31,7 +36,6 @@ public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewH
     @NonNull
     @Override
     public QuestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Inflate the item_quest.xml layout
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_quest, parent, false);
         return new QuestViewHolder(view);
@@ -41,14 +45,19 @@ public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewH
     public void onBindViewHolder(@NonNull QuestViewHolder holder, int position) {
         Quest quest = questsList.get(position);
 
-        // Bind data to views
+        // Bind basic data
         holder.questIcon.setImageResource(quest.getIconResId());
         holder.questTitle.setText(quest.getTitle());
         holder.questDescription.setText(quest.getDescription());
         holder.questReward.setText("+" + quest.getReward());
 
-        // Set click listener
-        holder.itemView.setOnClickListener(v -> {
+        // Progress support
+        holder.progressBar.setProgress(quest.getProgress());
+
+        // Button state
+        holder.markDoneBtn.setEnabled(quest.getProgress() < 100);
+
+        holder.markDoneBtn.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onQuestClick(quest, position);
             }
@@ -60,27 +69,30 @@ public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewH
         return questsList.size();
     }
 
+    // Method to update the list
+    public void updateQuests(List<Quest> newQuests) {
+        this.questsList = newQuests;
+        notifyDataSetChanged();
+    }
+
     // ViewHolder class
     public static class QuestViewHolder extends RecyclerView.ViewHolder {
         ImageView questIcon;
         TextView questTitle;
         TextView questDescription;
         TextView questReward;
+        ProgressBar progressBar;
+        MaterialButton markDoneBtn;
 
         public QuestViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            // Find views from item_quest.xml
             questIcon = itemView.findViewById(R.id.questIcon);
             questTitle = itemView.findViewById(R.id.questTitle);
             questDescription = itemView.findViewById(R.id.questDescription);
             questReward = itemView.findViewById(R.id.questReward);
+            progressBar = itemView.findViewById(R.id.questProgressBar);
+            markDoneBtn = itemView.findViewById(R.id.markDoneBtn);
         }
-    }
-
-    // Method to update the list
-    public void updateQuests(List<Quest> newQuests) {
-        this.questsList = newQuests;
-        notifyDataSetChanged();
     }
 }

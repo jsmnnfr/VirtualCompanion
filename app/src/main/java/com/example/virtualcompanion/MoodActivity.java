@@ -85,7 +85,6 @@ public class MoodActivity extends BaseActivity {
         // Apply gender-specific images to emojis
         applyGenderEmojis(emoji1, emoji2, emoji3, emoji4, emoji5);
 
-        // Initialize pet image with gender-appropriate neutral emotion
         initializePetImage();
 
         // Set up emoji click listeners
@@ -98,14 +97,26 @@ public class MoodActivity extends BaseActivity {
         // Submit → Mood Result
         submitButton.setOnClickListener(v -> {
 
+            if (selectedMoodIndex == -1) {
+                Toast.makeText(this, "Please select a mood first", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            DatabaseManager.get(this).saveMood(
+                    selectedMoodIndex + 1,
+                    String.valueOf(System.currentTimeMillis())
+            );
+
             Intent intent = new Intent(
                     MoodActivity.this,
                     MoodResultActivity.class
             );
 
+            intent.putExtra("selected_mood", selectedMoodIndex);
+
             startActivity(intent);
-            // ❌ NO finish()
         });
+
 
         // Settings → Settings
         if (settingsIcon != null) {

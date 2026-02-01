@@ -3,16 +3,73 @@ package com.example.virtualcompanion;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MoodResultActivity extends BaseActivity {
 
+    private static final String[] MOOD_LABELS = {
+            "Neutral", "Happy", "Sad", "Angry", "Anxious"
+    };
+
+    private static final String[] MOOD_MESSAGES = {
+            "It’s okay to feel steady today.",
+            "Great to see you feeling good today!",
+            "I know today feels heavy. You’re not alone.",
+            "Strong emotions are valid.",
+            "It’s okay to feel uneasy. I’ve got you."
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_mood_result);
+
+        // ===== MOOD REFLECTION =====
+        int moodIndex = DatabaseManager.get(this).getLatestMood();
+        String gender = DatabaseManager.get(this).getGender();
+
+        int[] emotions = "male".equalsIgnoreCase(gender)
+                ? new int[]{
+                R.drawable.emotion_neutral,
+                R.drawable.emotion_happy,
+                R.drawable.emotion_sad,
+                R.drawable.emotion_angry,
+                R.drawable.emotion_anxious
+        }
+                : new int[]{
+                R.drawable.emotion_neutral_g,
+                R.drawable.emotion_happy_g,
+                R.drawable.emotion_sad_g,
+                R.drawable.emotion_angry_g,
+                R.drawable.emotion_anxious_g
+        };
+
+        ImageView emotionOverlay = findViewById(R.id.emotionOverlay);
+        ImageView resultPetBase = findViewById(R.id.resultPetBase);
+        TextView resultMoodLabel = findViewById(R.id.resultMoodLabel);
+        TextView moodMessage = findViewById(R.id.moodMessage);
+
+        if (emotionOverlay != null) {
+            emotionOverlay.setImageResource(
+                    "male".equalsIgnoreCase(gender)
+                            ? R.drawable.emotion_neutral
+                            : R.drawable.emotion_neutral_g
+            );
+        }
+
+        if (resultPetBase != null) {
+            resultPetBase.setImageResource(emotions[moodIndex]);
+        }
+
+        if (resultMoodLabel != null) {
+            resultMoodLabel.setText(MOOD_LABELS[moodIndex]);
+        }
+
+        if (moodMessage != null) {
+            moodMessage.setText(MOOD_MESSAGES[moodIndex]);
+        }
 
         // ================= OUTFIT LAYERS =================
         try {
@@ -36,7 +93,7 @@ public class MoodResultActivity extends BaseActivity {
             if (coinAmount != null) {
                 int coins = DatabaseManager.get(this).getCoins();
                 coinAmount.setText(String.valueOf(coins));
-                
+
                 // CHEAT MODE: Long press to add 100 coins
                 coinAmount.setOnLongClickListener(v -> {
                     DatabaseManager.get(this).addCoins(100);

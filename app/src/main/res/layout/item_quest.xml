@@ -6,82 +6,110 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
+    app:cardElevation="4dp"
     app:cardBackgroundColor="#FFEEE5">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!-- Quest Icon -->
-        <ImageView
-            android:id="@+id/questIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_quests"
-            android:contentDescription="Quest Icon"
-            android:layout_marginEnd="16dp" />
-
-        <!-- Quest Details -->
+        <!-- Quest Info Row -->
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/questTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Quest 1"
-                android:textSize="18sp"
-                android:textColor="#2C2C2C"
-                android:textStyle="bold"
-                android:fontFamily="@font/nunito_bold"
-                android:layout_marginBottom="4dp" />
-
-            <TextView
-                android:id="@+id/questDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam"
-                android:textSize="12sp"
-                android:textColor="#6C6C6C"
-                android:maxLines="3"
-                android:ellipsize="end" />
-
-        </LinearLayout>
-
-        <!-- Reward Display -->
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginStart="12dp">
+            android:gravity="center_vertical">
 
-            <TextView
-                android:id="@+id/questReward"
+            <!-- Quest Icon -->
+            <ImageView
+                android:id="@+id/questIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_quests"
+                android:contentDescription="Quest Icon" />
+
+            <!-- Title + Description -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/questTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Quest Title"
+                    android:textColor="#2C2C2C"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/questDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="Quest Description goes here"
+                    android:textColor="#6C6C6C"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Reward -->
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="+50"
-                android:textSize="14sp"
-                android:textColor="#2C2C2C"
-                android:textStyle="bold"
-                android:fontFamily="@font/nunito_bold"
-                android:layout_marginEnd="4dp" />
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_coin"
-                android:contentDescription="Coin Reward" />
+                <TextView
+                    android:id="@+id/questReward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:text="+50"
+                    android:textColor="#2C2C2C"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_coin"
+                    android:contentDescription="Coin Icon" />
+            </LinearLayout>
         </LinearLayout>
 
-    </LinearLayout>
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/questProgressBar"
+            style="@android:style/Widget.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="12dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#4CAF50"
+            android:backgroundTint="#DDDDDD" />
 
+        <!-- Complete Quest Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/markDoneBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:minHeight="45dp"
+            android:text="Complete Quest"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:cornerRadius="20dp"
+            app:strokeWidth="2dp"
+            android:backgroundTint="#4CAF50"/>
+    </LinearLayout>
 </androidx.cardview.widget.CardView>

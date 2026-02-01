@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class CustomGlassesActivity extends BaseActivity {
 
     // Layers
-    private ImageView topLayer, bottomLayer, hatLayer, glassesLayer;
+    private ImageView topLayer, bottomLayer, hatLayer, glassesLayer, petDisplay;
 
     private TextView equipButton;
     private TextView coinDisplay;
@@ -39,7 +39,17 @@ public class CustomGlassesActivity extends BaseActivity {
 
         equipButton = findViewById(R.id.equipButton);
         coinDisplay = findViewById(R.id.coinAmount);
+        petDisplay = findViewById(R.id.petDisplay);
 
+        // ================= GENDER =================
+
+        String gender = DatabaseManager.get(this).getGender();
+
+        if ("female".equalsIgnoreCase(gender)) {
+            petDisplay.setImageResource(R.drawable.emotion_neutral_g);
+        } else {
+            petDisplay.setImageResource(R.drawable.emotion_neutral);
+        }
 
         // ================= RECYCLER =================
 
