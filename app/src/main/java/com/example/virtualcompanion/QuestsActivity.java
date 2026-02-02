@@ -8,8 +8,6 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
 public class QuestsActivity extends BaseActivity {
 
     private RecyclerView questsRecyclerView;
@@ -49,17 +47,8 @@ public class QuestsActivity extends BaseActivity {
 
         questsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Load quests based on current mood
-        int currentMood = db.getLatestMood();
-        List<Quest> quests = db.getQuestsForMood(currentMood);
-
-        if (quests.isEmpty()) {
-            Toast.makeText(this, "No quests for your mood today!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         questsAdapter = new QuestsAdapter(
-                quests,
+                db.getAllQuests(),
                 this::handleQuestMarkDone
         );
 
@@ -68,6 +57,7 @@ public class QuestsActivity extends BaseActivity {
 
     // ================= QUEST LOGIC =================
     private void handleQuestMarkDone(Quest quest, int position) {
+        DatabaseManager db = DatabaseManager.get(this);
 
         int currentProgress = db.getQuestProgress(quest.getId());
 

@@ -18,7 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "virtual_companion.db";
 
     // Change this if you modify tables later
-    private static final int DB_VERSION = 6; // Incremented for mood TEXT migration
+    private static final int DB_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // ================= USER TABLE =================
         // Stores main player data
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS user (" +
+                "CREATE TABLE user (" +
 
                         // Unique ID (auto-generated)
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -50,7 +50,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // ================= ACCESSORY TABLE =================
         // Stores shop & equipped items
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS accessory (" +
+                "CREATE TABLE accessory (" +
 
                         // Unique ID
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // ================= QUEST TABLE =================
         // Stores quest progress
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS quest (" +
+                "CREATE TABLE quest (" +
 
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         // Quest title
@@ -82,17 +82,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "reward INTEGER NOT NULL DEFAULT 0, " +
                         "progress INTEGER NOT NULL DEFAULT 0, " +
                         // 0 = not done, 1 = done
-                        "rewarded INTEGER NOT NULL DEFAULT 0 CHECK (rewarded IN (0,1)), " +
-                        // Mood category (neutral, happy, sad, angry, anxious)
-                        "mood TEXT NOT NULL CHECK " +
-                        "(mood IN ('neutral','happy','sad','angry','anxious'))" +
+                        "rewarded INTEGER NOT NULL DEFAULT 0 CHECK (rewarded IN (0,1))" +
                         ");"
         );
 
         // ================= MOOD TABLE =================
         // Stores mood history
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS mood (" +
+                "CREATE TABLE mood (" +
 
                         "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         // Mood value (1 to 5 only)
@@ -110,50 +107,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Insert starting data (runs once)
      */
     private void insertDefaults(SQLiteDatabase db) {
-
+        db.execSQL("INSERT INTO user (name, coins, pet_gender) VALUES ('Iggy',150,'male');");
         db.execSQL(
-                "INSERT OR IGNORE INTO user (id, name, coins, pet_gender) " +
-                        "VALUES (1,'Iggy',150,'male');"
-        );
-
-        // 5 quests per mood
-        db.execSQL(
-                "INSERT OR IGNORE INTO quest (title, description, reward, mood) VALUES " +
-
-                        // Neutral
-                        "('Breathing Exercise','Guided deep breathing for stress relief',50,'neutral')," +
-                        "('Hydration Reminder','Encouraging water intake for physical wellness',30,'neutral')," +
-                        "('Positive Reflection','Write one thing you are grateful for or proud of',60,'neutral')," +
-                        "('Journaling Check-In','Write a short journal entry about your day',40,'neutral')," +
-                        "('Stretch Break','Do a short stretching routine',35,'neutral')," +
-
-                        // Happy
-                        "('Share Gratitude','Tell someone what you appreciate about them',50,'happy')," +
-                        "('Compliment Someone','Give a genuine compliment today',40,'happy')," +
-                        "('Dance for 5 Minutes','Move to your favorite song',45,'happy')," +
-                        "('Smile at a Mirror','Smile at yourself for a minute',30,'happy')," +
-                        "('Favorite Song Listening','Listen to your favorite song',35,'happy')," +
-
-                        // Sad
-                        "('Talk to a Friend','Reach out to someone you trust',50,'sad')," +
-                        "('Guided Meditation','Use a meditation app to relax',40,'sad')," +
-                        "('Write Down Feelings','Write your emotions down',45,'sad')," +
-                        "('Uplifting Music','Play mood-lifting music',35,'sad')," +
-                        "('Nature Walk','Take a short walk outside',40,'sad')," +
-
-                        // Angry
-                        "('Deep Breathing','Practice slow breathing',50,'angry')," +
-                        "('Physical Exercise','Do light physical activity',45,'angry')," +
-                        "('Count to 10','Pause before reacting',30,'angry')," +
-                        "('Punching Bag Exercise','Release energy safely',40,'angry')," +
-                        "('Cold Water Splash','Splash cold water on your face',35,'angry')," +
-
-                        // Anxious
-                        "('Muscle Relaxation','Tense and relax muscles',50,'anxious')," +
-                        "('Short Meditation','5–10 minute meditation',45,'anxious')," +
-                        "('Journaling Thoughts','Write worries down',40,'anxious')," +
-                        "('Warm Drink','Drink something warm',35,'anxious')," +
-                        "('Visualization','Visualize a peaceful place',45,'anxious');"
+                "INSERT INTO quest (title, description, reward, progress, rewarded) VALUES " +
+                        "('Breathing Exercise','Guided deep breathing for stress relief',50,0,0)," +
+                        "('Hydration Reminder','Encouraging water intake for physical wellness',30,0,0)," +
+                        "('Movement Break','Gentle stretching to release tension',40,0,0)," +
+                        "('Positive Reflection','Write one thing you are grateful for or proud of',60,0,0)," +
+                        "('Grounding Technique','Simple mindfulness exercises',25,0,0);"
         );
     }
 
@@ -163,10 +124,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
 
-        // Recreate quest table to migrate mood from INTEGER to TEXT
-        if (oldV < 6) {
-            db.execSQL("DROP TABLE IF EXISTS quest");
-            onCreate(db);
-        }
+        // Delete old tables
+        db.execSQL("DROP TABLE IF EXISTS user");
+        db.execSQL("DROP TABLE IF EXISTS accessory");
+        db.execSQL("DROP TABLE IF EXISTS quest");
+        db.execSQL("DROP TABLE IF EXISTS mood");
+
+        // Recreate
+        onCreate(db);
     }
 }

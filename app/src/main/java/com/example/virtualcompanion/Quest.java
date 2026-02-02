@@ -9,23 +9,27 @@ public class Quest {
     private int progress;
     private boolean rewarded;
     private int iconResId;
-    private String mood;
 
     // Full constructor
-    public Quest(int id, String title, String description, int reward, String mood, int iconResId) {
+    public Quest(int id, String title, String description, int reward, int iconResId) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.reward = reward;
         this.iconResId = iconResId;
-        this.mood = mood;
         this.progress = 0;
         this.rewarded = false;
     }
 
     // Constructor with default icon
-    public Quest(int id, String title, String description, int reward, String mood) {
-        this(id, title, description, reward, mood, R.drawable.ic_quests);
+    public Quest(int id, String title, String description, int reward) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.reward = reward;
+        this.iconResId = R.drawable.ic_quests;
+        this.progress = 0;
+        this.rewarded = false;
     }
 
     // ================= GETTERS & SETTERS =================
@@ -84,13 +88,5 @@ public class Quest {
 
     public void setIconResId(int iconResId) {
         this.iconResId = iconResId;
-    }
-
-    public String getMood() {
-        return mood;
-    }
-
-    public void setMood(String mood) {
-        this.mood = mood;
     }
 }
