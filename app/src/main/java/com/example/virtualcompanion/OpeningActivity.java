@@ -24,8 +24,13 @@ public class OpeningActivity extends BaseActivity {
 
         // ================= TESTING ONLY =================
         // Uncomment the line below to reset today's mood and quests every time you open the app
-        db.deleteMoodForToday();
-        db.resetAllQuestProgressForTesting();
+        // db.deleteMoodForToday();
+        // db.resetAllQuestProgressForTesting();
+        // ================================================
+
+        // ================= TESTING ONLY =================
+        // Uncomment the line below to reset customization and re-test name and gender input
+        // db.setHasCustomized(false);
         // ================================================
 
         setContentView(R.layout.activity_opening);
@@ -41,13 +46,27 @@ public class OpeningActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                // Go to Customize screen
-                Intent intent = new Intent(
-                        OpeningActivity.this,
-                        CustomizeActivity.class
-                );
+                // Go to Customize screen (new users only)
+                Intent intent;
+                if (!db.hasCustomized()) {
+                    intent = new Intent(
+                            OpeningActivity.this,
+                            CustomizeActivity.class
+                    );
+                } else if (db.hasSelectedMoodToday()) {
+                    intent = new Intent(
+                            OpeningActivity.this,
+                            MoodResultActivity.class
+                    );
+                } else {
+                    intent = new Intent(
+                            OpeningActivity.this,
+                            MoodActivity.class
+                    );
+                }
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish(); // prevent going back
             }
         });

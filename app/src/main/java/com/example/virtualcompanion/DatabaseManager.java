@@ -23,11 +23,16 @@ public class DatabaseManager {
     // Singleton instance (only one DB manager)
     private static DatabaseManager instance;
 
+    private static final String PREFS_NAME = "virtual_companion_prefs";
+    private static final String KEY_HAS_CUSTOMIZED = "has_customized";
+
     private final DatabaseHelper helper;
+    private final Context appContext;
 
     // Private constructor
     private DatabaseManager(Context context) {
-        helper = new DatabaseHelper(context);
+        appContext = context.getApplicationContext();
+        helper = new DatabaseHelper(appContext);
     }
 
     /**
@@ -443,6 +448,22 @@ public class DatabaseManager {
         if (c.moveToFirst()) count = c.getInt(0);
         c.close();
         return count;
+    }
+
+    // ================= PREFS =================
+
+    public boolean hasCustomized() {
+        return appContext
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getBoolean(KEY_HAS_CUSTOMIZED, false);
+    }
+
+    public void setHasCustomized(boolean customized) {
+        appContext
+                .getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean(KEY_HAS_CUSTOMIZED, customized)
+                .apply();
     }
 
 }

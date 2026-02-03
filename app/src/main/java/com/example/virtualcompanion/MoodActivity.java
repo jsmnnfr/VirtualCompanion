@@ -133,6 +133,7 @@ public class MoodActivity extends BaseActivity {
             intent.putExtra("selected_mood", selectedMoodIndex);
 
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish(); // Finish this activity so they can't go back to selection today
         });
 
@@ -147,6 +148,7 @@ public class MoodActivity extends BaseActivity {
                 );
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
         }
 

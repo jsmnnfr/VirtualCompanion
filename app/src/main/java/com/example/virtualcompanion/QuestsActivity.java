@@ -111,6 +111,7 @@ public class QuestsActivity extends BaseActivity {
                 intent.putExtra("flow", "QUEST_COMPLETE");
 
                 startActivity(intent);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
                 return;
             }
@@ -125,15 +126,17 @@ public class QuestsActivity extends BaseActivity {
     private void setupNavigation() {
 
         if (settingsIcon != null) {
-            settingsIcon.setOnClickListener(v ->
-                    startActivity(new Intent(this, SettingsActivity.class))
-            );
+            settingsIcon.setOnClickListener(v -> {
+                startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
         if (navHome != null) {
-            navHome.setOnClickListener(v ->
-                    startActivity(new Intent(this, MoodResultActivity.class))
-            );
+            navHome.setOnClickListener(v -> {
+                startActivity(new Intent(this, MoodResultActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
         if (navQuests != null) {
@@ -143,9 +146,10 @@ public class QuestsActivity extends BaseActivity {
         }
 
         if (navCustomize != null) {
-            navCustomize.setOnClickListener(v ->
-                    startActivity(new Intent(this, CustomTopActivity.class))
-            );
+            navCustomize.setOnClickListener(v -> {
+                startActivity(new Intent(this, CustomTopActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
     }
 

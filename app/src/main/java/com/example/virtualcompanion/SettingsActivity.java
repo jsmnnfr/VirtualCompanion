@@ -155,6 +155,11 @@ public class SettingsActivity extends BaseActivity {
             db.setName(name);
             db.setGender(currentGender[0]);
 
+            // Navigate to home (MoodResultActivity) to immediately show updated pet
+            Intent intent = new Intent(this, MoodResultActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
 
@@ -190,7 +195,10 @@ public class SettingsActivity extends BaseActivity {
         ImageView backButton = findViewById(R.id.backButton);
 
         if (backButton != null) {
-            backButton.setOnClickListener(v -> finish());
+            backButton.setOnClickListener(v -> {
+                finish();
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            });
         }
 
 
@@ -206,6 +214,7 @@ public class SettingsActivity extends BaseActivity {
                         this,
                         MoodResultActivity.class
                 ));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             });
         }
@@ -216,6 +225,7 @@ public class SettingsActivity extends BaseActivity {
                         this,
                         QuestsActivity.class
                 ));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             });
         }
@@ -226,6 +236,7 @@ public class SettingsActivity extends BaseActivity {
                         this,
                         CustomTopActivity.class
                 ));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 finish();
             });
         }

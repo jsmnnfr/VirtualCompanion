@@ -151,6 +151,7 @@ public class CustomizeActivity extends BaseActivity {
 
             db.setName(name);
             db.setGender(db.getGender());
+            db.setHasCustomized(true);
 
             Intent intent;
             if (db.hasSelectedMoodToday()) {
@@ -162,6 +163,7 @@ public class CustomizeActivity extends BaseActivity {
             }
 
             startActivity(intent);
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         });
     }
