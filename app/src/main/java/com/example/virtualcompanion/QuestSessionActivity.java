@@ -423,13 +423,9 @@ public class QuestSessionActivity extends BaseActivity {
             // Reset all quest progress for next cycle
             db.resetAllQuestProgressForTesting();
 
-            // MARK HAPPY QUESTS AS COMPLETED IF MOOD IS HAPPY
-            if ("happy".equalsIgnoreCase(questMood)) {
-                db.markHappyQuestsCompleted();
-                android.util.Log.d("QuestSession", "Marked happy quests as completed for today");
-            }
-
-            Toast.makeText(this, "All quests complete! How do you feel now?", Toast.LENGTH_LONG).show();
+            // MARK FIRST QUEST COMPLETION FOR TODAY (ANY MOOD)
+            db.markFirstQuestCompleted();
+            android.util.Log.d("QuestSession", "Marked first quest set completed for today");
 
             // Go to mood selection
             Intent intent = new Intent(this, MoodActivity.class);

@@ -106,7 +106,7 @@ public class CustomHatActivity extends BaseActivity {
 
         String[] prices = {
 
-                "",
+                " ",
                 "0",
                 "0",
                 "150",

@@ -106,7 +106,7 @@ public class CustomGlassesActivity extends BaseActivity {
 
         String[] prices = {
 
-                "",
+                " ",
                 "0",
                 "0",
                 "150",

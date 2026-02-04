@@ -31,6 +31,7 @@ public class DatabaseManager {
     private static final String KEY_USED_QUEST_IDS = "used_quest_ids";
     private static final String KEY_QUEST_DATE = "quest_date";
     private static final String KEY_HAPPY_QUEST_DATE = "last_happy_quest_date";
+    private static final String KEY_FIRST_QUEST_COMPLETED = "first_quest_completed_today"; // NEW
 
     private final DatabaseHelper helper;
     private final Context appContext;
@@ -267,26 +268,51 @@ public class DatabaseManager {
         );
     }
 
-    // ================= HAPPY MOOD TRACKING =================
+    // ================= FIRST QUEST COMPLETION TRACKING (PER DAY) =================
+
+    /**
+     * Check if user completed ANY quest set today (first use done)
+     */
+    public boolean hasCompletedFirstQuestToday() {
+        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String lastCompletionDate = prefs.getString(KEY_FIRST_QUEST_COMPLETED, "");
+        String today = getTodayDate();
+
+        boolean completed = lastCompletionDate.equals(today);
+        android.util.Log.d("DatabaseManager", "hasCompletedFirstQuestToday: " + completed + " (lastDate=" + lastCompletionDate + ", today=" + today + ")");
+        return completed;
+    }
+
+    /**
+     * Mark that first quest set was completed today (any mood)
+     */
+    public void markFirstQuestCompleted() {
+        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String today = getTodayDate();
+        prefs.edit().putString(KEY_FIRST_QUEST_COMPLETED, today).apply();
+        android.util.Log.d("DatabaseManager", "Marked first quest completed for today: " + today);
+    }
+
+    // ================= HAPPY MOOD TRACKING (LEGACY - DEPRECATED) =================
 
     /**
      * Check if user already completed Happy mood quests today
+     * @deprecated Use hasCompletedFirstQuestToday() instead
      */
+    @Deprecated
     public boolean hasCompletedHappyQuestsToday() {
-        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String lastHappyDate = prefs.getString(KEY_HAPPY_QUEST_DATE, "");
-        String today = getTodayDate();
-
-        return lastHappyDate.equals(today);
+        // Now just checks if first quest was completed today
+        return hasCompletedFirstQuestToday();
     }
 
     /**
      * Mark that Happy quests were completed today
+     * @deprecated Use markFirstQuestCompleted() instead
      */
+    @Deprecated
     public void markHappyQuestsCompleted() {
-        SharedPreferences prefs = appContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putString(KEY_HAPPY_QUEST_DATE, getTodayDate()).apply();
-        android.util.Log.d("DatabaseManager", "Marked Happy quests as completed today");
+        // Now just marks first quest as completed
+        markFirstQuestCompleted();
     }
 
     // ================= QUEST SESSION MANAGEMENT WITH DAILY RESET =================
@@ -493,8 +519,11 @@ public class DatabaseManager {
         editor.remove(KEY_CURRENT_QUEST_IDS);
         editor.remove(KEY_QUEST_DATE);
 
-        // Clear happy quest date (reset daily)
+        // Clear happy quest date (reset daily) - LEGACY
         editor.remove(KEY_HAPPY_QUEST_DATE);
+
+        // Clear first quest completion flag (reset daily)
+        editor.remove(KEY_FIRST_QUEST_COMPLETED);
 
         editor.apply();
         android.util.Log.d("DatabaseManager", "Cleared all quest history");

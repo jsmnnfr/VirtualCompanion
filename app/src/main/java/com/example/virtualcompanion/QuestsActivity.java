@@ -69,7 +69,7 @@ public class QuestsActivity extends BaseActivity {
     // ================= VIEW BINDING =================
     private void initializeViews() {
         questsRecyclerView = findViewById(R.id.questsRecyclerView);
-        emptyStateMessage = findViewById(R.id.emptyStateMessage); // Add this to your XML
+        emptyStateMessage = findViewById(R.id.emptyStateMessage);
         navHome = findViewById(R.id.navHome);
         navQuests = findViewById(R.id.navQuests);
         navCustomize = findViewById(R.id.navCustomize);
@@ -85,14 +85,14 @@ public class QuestsActivity extends BaseActivity {
 
         questsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Check if Happy mood AND already completed today
-        if (moodIndex == 1 && db.hasCompletedHappyQuestsToday()) {
-            // Show empty state for Happy mood (second+ time)
-            showEmptyState("You're happy! No more tasks needed today! \n\nEnjoy your day!");
+        // Check if Happy mood AND first quest already completed today
+        if (moodIndex == 1 && db.hasCompletedFirstQuestToday()) {
+            // Show empty state for Happy mood (after first quest completion today)
+            showEmptyState("You’re all done for today! Keep this happiness close!");
             return;
         }
 
-        // Get quests for current mood (including happy on first time)
+        // Get quests for current mood (including happy on first time today)
         List<Quest> quests = db.getQuestsForMood(moodIndex);
 
         if (quests.isEmpty()) {
@@ -124,9 +124,9 @@ public class QuestsActivity extends BaseActivity {
 
     private void refreshQuestList() {
         if (db != null) {
-            // Check if Happy mood AND already completed today
-            if (moodIndex == 1 && db.hasCompletedHappyQuestsToday()) {
-                showEmptyState("You're happy! No more tasks needed today! \n\nEnjoy your day!");
+            // Check if Happy mood AND first quest already completed today
+            if (moodIndex == 1 && db.hasCompletedFirstQuestToday()) {
+                showEmptyState("You're happy! No more tasks needed today! 😊\n\nEnjoy your day!");
                 return;
             }
 

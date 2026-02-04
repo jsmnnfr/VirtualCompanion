@@ -106,11 +106,11 @@ public class CustomBottomActivity extends BaseActivity {
 
 
         String[] prices = {
-                "", "", "", "200", "200", "250"
+                " ", "0", "0", "0", "200", "200", "250"
         };
 
         int[] priceValues = {
-                0, 0, 0, 200, 200, 250
+               0, 0, 0, 0, 200, 200, 250
         };
 
         // Initialize free items (price = 0)

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -5,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:fitsSystemWindows="true">
 
     <!-- Background Image -->
     <ImageView
@@ -21,13 +23,6 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Gradient Overlay for depth -->
-
-    <!-- Pet Image with shadow effect -->
-
-    <!-- App Name - can move freely, centered around image bottom -->
-
-    <!-- Decorative line under text -->
-
     <View
         android:id="@+id/gradientOverlay"
         android:layout_width="0dp"
@@ -40,6 +35,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <!-- Pet Image with shadow effect -->
     <ImageView
         android:id="@+id/petImage"
         android:layout_width="0dp"
@@ -58,6 +54,7 @@
         app:layout_constraintVertical_bias="0.306"
         app:layout_constraintWidth_percent="0.9" />
 
+    <!-- App Name - can move freely, centered around image bottom -->
     <TextView
         android:id="@+id/appName"
         android:layout_width="wrap_content"
@@ -82,6 +79,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/petImage" />
 
+    <!-- Decorative line under text -->
     <View
         android:id="@+id/decorativeLine"
         android:layout_width="0dp"

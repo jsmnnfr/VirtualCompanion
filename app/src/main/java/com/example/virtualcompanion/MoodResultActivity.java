@@ -14,11 +14,11 @@ public class MoodResultActivity extends BaseActivity {
     };
 
     private static final String[] MOOD_MESSAGES = {
-            "It's okay to feel steady today.",
-            "Great to see you feeling good today!",
-            "I know today feels heavy. You're not alone.",
-            "Strong emotions are valid.",
-            "It's okay to feel uneasy. I've got you."
+            "You’re doing your best, and that’s enough!",
+            "Happiness looks good on you. Keep it!",
+            "It’s okay to feel low. You're not alone.",
+            "Your feelings are loud, but you’re stronger.",
+            "Breathe. You’re safe. You’ve got this."
     };
 
     @Override

@@ -56,7 +56,7 @@ public class QuestsAdapter extends RecyclerView.Adapter<QuestsAdapter.QuestViewH
 
         if (isCompleted) {
             // GRAY OUT COMPLETED QUEST
-            holder.markDoneBtn.setText("✓ Done");
+            holder.markDoneBtn.setText("Done");
             holder.markDoneBtn.setEnabled(false);
             holder.markDoneBtn.setBackgroundColor(Color.GRAY);
             holder.markDoneBtn.setTextColor(Color.WHITE);

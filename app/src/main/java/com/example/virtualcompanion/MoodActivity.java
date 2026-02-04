@@ -1,8 +1,11 @@
 package com.example.virtualcompanion;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -13,8 +16,9 @@ public class MoodActivity extends BaseActivity {
     private String currentGender = "male";
     private int selectedMoodIndex = -1;
     private ImageView mainPetImage;
+    private ImageView lastSelectedEmoji = null;
 
-    // Pet image resources based on gender and mood (UPDATED from co-worker)
+    // Pet image resources based on gender and mood
     private static final int[] MALE_PET_EMOTIONS = {
             R.drawable.emotion_neutral,
             R.drawable.emotion_happy,
@@ -63,7 +67,7 @@ public class MoodActivity extends BaseActivity {
         // Submit Button
         MaterialButton submitButton = findViewById(R.id.submitButton);
 
-        // Top Settings Icon
+        // Top Settings Icon - ALWAYS DISABLED
         ImageView settingsIcon = findViewById(R.id.settingsIcon);
 
         // Pet Image
@@ -89,7 +93,7 @@ public class MoodActivity extends BaseActivity {
 
         initializePetImage();
 
-        // Set up emoji click listeners
+        // Set up emoji click listeners with animation
         setupEmojiListeners(emoji1, 0);
         setupEmojiListeners(emoji2, 1);
         setupEmojiListeners(emoji3, 2);
@@ -103,7 +107,7 @@ public class MoodActivity extends BaseActivity {
         if ("QUEST_COMPLETE".equals(flow)) {
             if (moodInfoMessage != null) {
                 moodInfoMessage.setVisibility(View.VISIBLE);
-                moodInfoMessage.setText("You completed all your tasks! How do you feel now?");
+                moodInfoMessage.setText("You've accomplished so much today! You did it! how are you feeling now?");
             }
             if (moodPrompt != null) {
                 moodPrompt.setVisibility(View.GONE);
@@ -137,43 +141,29 @@ public class MoodActivity extends BaseActivity {
             finish(); // Finish this activity so they can't go back to selection today
         });
 
-        // Settings → Settings (HIDE when coming from quest completion)
+        // Settings - ALWAYS DISABLED (NO OPACITY CHANGE)
         if (settingsIcon != null) {
-            if ("QUEST_COMPLETE".equals(flow)) {
-                // Hide settings button after completing all quests
-                settingsIcon.setVisibility(View.GONE);
-            } else {
-                // Normal flow - settings button visible
-                settingsIcon.setOnClickListener(v -> {
-                    Intent intent = new Intent(
-                            MoodActivity.this,
-                            SettingsActivity.class
-                    );
-                    startActivity(intent);
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                });
-            }
+            settingsIcon.setOnClickListener(v -> {
+                Toast.makeText(MoodActivity.this, "Please set your mood first", Toast.LENGTH_SHORT).show();
+            });
         }
 
-        // Home - DISABLED with message
+        // Home - ALWAYS DISABLED (NO OPACITY CHANGE)
         if (navHome != null) {
-            navHome.setAlpha(0.3f);
             navHome.setOnClickListener(v -> {
                 Toast.makeText(MoodActivity.this, "Please set your mood first", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Quests - DISABLED with message
+        // Quests - ALWAYS DISABLED (NO OPACITY CHANGE)
         if (navQuests != null) {
-            navQuests.setAlpha(0.3f);
             navQuests.setOnClickListener(v -> {
                 Toast.makeText(MoodActivity.this, "Please set your mood first", Toast.LENGTH_SHORT).show();
             });
         }
 
-        // Customize - DISABLED with message
+        // Customize - ALWAYS DISABLED (NO OPACITY CHANGE)
         if (navCustomize != null) {
-            navCustomize.setAlpha(0.3f);
             navCustomize.setOnClickListener(v -> {
                 Toast.makeText(MoodActivity.this, "Please set your mood first", Toast.LENGTH_SHORT).show();
             });
@@ -228,13 +218,58 @@ public class MoodActivity extends BaseActivity {
     }
 
     /**
-     * Set up emoji click listener and update pet emotion
+     * Set up emoji click listener with pop-up animation
      */
     private void setupEmojiListeners(ImageView emojiView, int moodIndex) {
         emojiView.setOnClickListener(v -> {
             selectedMoodIndex = moodIndex;
+
+            // Reset previous selection
+            if (lastSelectedEmoji != null && lastSelectedEmoji != emojiView) {
+                resetEmojiScale(lastSelectedEmoji);
+            }
+
+            // Animate current selection
+            animateEmojiPopUp(emojiView);
+
+            // Update pet emotion
             updatePetEmotion(moodIndex);
+
+            // Remember last selected
+            lastSelectedEmoji = emojiView;
         });
+    }
+
+    /**
+     * Animate emoji with pop-up effect when clicked
+     */
+    private void animateEmojiPopUp(ImageView emojiView) {
+        // Scale up animation with bounce effect
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(emojiView, "scaleX", 1f, 1.3f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(emojiView, "scaleY", 1f, 1.3f);
+
+        // Slight elevation effect
+        ObjectAnimator elevate = ObjectAnimator.ofFloat(emojiView, "translationZ", 0f, 16f);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY, elevate);
+        animatorSet.setDuration(300);
+        animatorSet.setInterpolator(new OvershootInterpolator(2f)); // Bounce effect
+        animatorSet.start();
+    }
+
+    /**
+     * Reset emoji scale to normal
+     */
+    private void resetEmojiScale(ImageView emojiView) {
+        ObjectAnimator scaleX = ObjectAnimator.ofFloat(emojiView, "scaleX", 1.3f, 1f);
+        ObjectAnimator scaleY = ObjectAnimator.ofFloat(emojiView, "scaleY", 1.3f, 1f);
+        ObjectAnimator lower = ObjectAnimator.ofFloat(emojiView, "translationZ", 16f, 0f);
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(scaleX, scaleY, lower);
+        animatorSet.setDuration(200);
+        animatorSet.start();
     }
 
     /**

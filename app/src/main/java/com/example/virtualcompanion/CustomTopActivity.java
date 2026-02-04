@@ -115,7 +115,7 @@ public class CustomTopActivity extends BaseActivity {
 
         String[] prices = {
 
-                "",
+                " ",
                 "0", "0", "0", "0",
                 "150", "150", "200",
                 "250", "250"

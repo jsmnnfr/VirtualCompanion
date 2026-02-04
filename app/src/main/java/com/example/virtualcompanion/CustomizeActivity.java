@@ -17,6 +17,7 @@ public class CustomizeActivity extends BaseActivity {
     private boolean letterToastShown = false;
     private boolean maxToastShown = false;
     private boolean isEditing = false;
+    private View lastSelectedGenderButton = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,17 @@ public class CustomizeActivity extends BaseActivity {
 
         applyGenderImage(customizablePet, db.getGender());
 
+        // Set initial selected button based on saved gender
+        if ("female".equalsIgnoreCase(db.getGender())) {
+            lastSelectedGenderButton = girlButton;
+            girlButton.setScaleX(1.1f);
+            girlButton.setScaleY(1.1f);
+        } else {
+            lastSelectedGenderButton = boyButton;
+            boyButton.setScaleX(1.1f);
+            boyButton.setScaleY(1.1f);
+        }
+
 
         // ================= ENABLE EDITING METHOD =================
 
@@ -71,7 +83,7 @@ public class CustomizeActivity extends BaseActivity {
                 petNameInput.setFocusable(false);
                 petNameInput.setFocusableInTouchMode(false);
                 petNameInput.setCursorVisible(false);
-                petNameInput.setClickable(true); // Keep clickable to enable editing again
+                petNameInput.setClickable(true);
                 petNameInput.clearFocus();
 
                 // Hide keyboard
@@ -175,16 +187,56 @@ public class CustomizeActivity extends BaseActivity {
         });
 
 
-        // ================= GENDER =================
+        // ================= GENDER WITH SIMPLE ANIMATION =================
 
         boyButton.setOnClickListener(v -> {
+            // Reset previous selection
+            if (lastSelectedGenderButton != null) {
+                lastSelectedGenderButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(200)
+                        .start();
+            }
+
+            // Scale up current selection
+            boyButton.animate()
+                    .scaleX(1.1f)
+                    .scaleY(1.1f)
+                    .setDuration(300)
+                    .start();
+
+            // Update gender
             db.setGender("male");
             applyGenderImage(customizablePet, "male");
+
+            // Remember selection
+            lastSelectedGenderButton = boyButton;
         });
 
         girlButton.setOnClickListener(v -> {
+            // Reset previous selection
+            if (lastSelectedGenderButton != null) {
+                lastSelectedGenderButton.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(200)
+                        .start();
+            }
+
+            // Scale up current selection
+            girlButton.animate()
+                    .scaleX(1.1f)
+                    .scaleY(1.1f)
+                    .setDuration(300)
+                    .start();
+
+            // Update gender
             db.setGender("female");
             applyGenderImage(customizablePet, "female");
+
+            // Remember selection
+            lastSelectedGenderButton = girlButton;
         });
 
 
