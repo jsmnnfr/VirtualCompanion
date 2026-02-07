@@ -20,19 +20,19 @@ public class MoodActivity extends BaseActivity {
 
     // Pet image resources based on gender and mood
     private static final int[] MALE_PET_EMOTIONS = {
-            R.drawable.emote_neutral_b_moodresult,
-            R.drawable.emote_happy_b_moodresult,
-            R.drawable.emote_sad_b_moodresult,
-            R.drawable.emote_angry_b_moodresult,
-            R.drawable.emote_anxious_b_moodresult
+            R.drawable.emotion_neutral,
+            R.drawable.emotion_happy,
+            R.drawable.emotion_sad,
+            R.drawable.emotion_angry,
+            R.drawable.emotion_anxious
     };
 
     private static final int[] FEMALE_PET_EMOTIONS = {
-            R.drawable.emote_neutral_g_moodresult,
-            R.drawable.emote_happy_g_moodresult,
-            R.drawable.emote_sad_g_moodresult,
-            R.drawable.emote_angry_g_moodresult,
-            R.drawable.emote_anxious_g_moodresult
+            R.drawable.emotion_neutral_g,
+            R.drawable.emotion_happy_g,
+            R.drawable.emotion_sad_g,
+            R.drawable.emotion_angry_g,
+            R.drawable.emotion_anxious_g
     };
 
     // Emoji resources based on gender
@@ -124,27 +124,10 @@ public class MoodActivity extends BaseActivity {
 
             // Save mood with current date
             DatabaseManager dbManager = DatabaseManager.get(this);
-            int moodId = selectedMoodIndex + 1;
-
-            dbManager.saveMood(moodId, dbManager.getTodayDate());
-
-            // Reset quests for moods except for Happy_mood
-            String moodText;
-            switch (selectedMoodIndex) {
-                    case 0: moodText = "neutral";
-                break;
-                    case 1: moodText = "happy";
-                break;
-                    case 2: moodText = "sad";
-                break;
-                    case 3: moodText = "angry";
-                break;
-                    case 4: moodText = "anxious";
-                break;
-                    default: moodText = "neutral";
-            }
-
-            dbManager.resetQuestsForMood(moodText);
+            dbManager.saveMood(
+                    selectedMoodIndex + 1,
+                    dbManager.getTodayDate()
+            );
 
             Intent intent = new Intent(
                     MoodActivity.this,
