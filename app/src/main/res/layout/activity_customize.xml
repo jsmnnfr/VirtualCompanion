@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!-- Background Image - FULL SCREEN -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/background_placeholder"
+        android:src="@drawable/bg_main"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -31,9 +32,6 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Title - Responsive text -->
-
-    <!-- Name Input Container -->
-
     <TextView
         android:id="@+id/titleText"
         android:layout_width="0dp"
@@ -59,6 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Name Input Container -->
     <LinearLayout
         android:id="@+id/nameContainer"
         android:layout_width="wrap_content"
@@ -70,6 +69,8 @@
         android:paddingHorizontal="24dp"
         android:paddingVertical="8dp"
         android:elevation="10dp"
+        android:clickable="true"
+        android:focusable="true"
         app:layout_constraintTop_toBottomOf="@id/titleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -93,7 +94,11 @@
             android:shadowColor="#CC000000"
             android:shadowDx="0"
             android:shadowDy="3"
-            android:shadowRadius="8" />
+            android:shadowRadius="8"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:cursorVisible="false"
+            android:clickable="true" />
 
         <ImageView
             android:id="@+id/editIcon"
@@ -101,37 +106,36 @@
             android:layout_height="28dp"
             android:layout_marginStart="10dp"
             android:contentDescription="Edit name"
-            android:src="@drawable/ic_edit" />
+            android:src="@drawable/ic_edit"
+            android:clickable="true"
+            android:focusable="true" />
 
     </LinearLayout>
 
-    <!-- Pet Image - Overlapping design -->
-
-    <!-- Gender Label with shadow - overlays bottom of pet -->
-
-    <!-- Gender Selection Buttons - overlaps with pet image -->
-
+    <!-- Pet Image - Adaptive with constraints (like activity_mood_result) -->
     <ImageView
         android:id="@+id/customizablePet"
-        android:layout_width="421dp"
-        android:layout_height="539dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:contentDescription="Your Pet"
         android:elevation="5dp"
         android:scaleType="fitCenter"
         android:src="@drawable/emotion_neutral"
-        app:layout_constraintBottom_toBottomOf="@id/genderContainer"
-        app:layout_constraintDimensionRatio="H,4:5"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="1.02"
+        app:layout_constraintDimensionRatio="H,421:539"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/nameContainer"
-        app:layout_constraintVertical_bias="0.0"
-        app:layout_constraintWidth_percent="0.95" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.42" />
 
+    <!-- Gender Label with shadow -->
     <TextView
         android:id="@+id/genderLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:elevation="12dp"
         android:fontFamily="@font/nunito_bold"
         android:shadowColor="#DD000000"
@@ -146,37 +150,31 @@
         app:autoSizeMinTextSize="16sp"
         app:autoSizeStepGranularity="1sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/genderContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.717" />
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- Done Button - Bottom positioned -->
+    <!-- Gender Selection Buttons -->
     <LinearLayout
         android:id="@+id/genderContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
         android:elevation="12dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/doneButton"
+        android:padding="8dp"
+        app:layout_constraintBottom_toTopOf="@id/doneButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/genderLabel"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintStart_toStartOf="parent">
 
         <!-- Boy Button -->
         <LinearLayout
             android:id="@+id/boyButton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
+            android:layout_margin="8dp"
             android:background="@drawable/gender_selector_bg"
             android:clickable="true"
-            android:elevation="4dp"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
@@ -210,10 +208,9 @@
             android:id="@+id/girlButton"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
+            android:layout_margin="8dp"
             android:background="@drawable/gender_selector_bg"
             android:clickable="true"
-            android:elevation="4dp"
             android:focusable="true"
             android:gravity="center"
             android:orientation="vertical"
@@ -244,6 +241,7 @@
 
     </LinearLayout>
 
+    <!-- Done Button - Bottom positioned -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/doneButton"
         android:layout_width="0dp"

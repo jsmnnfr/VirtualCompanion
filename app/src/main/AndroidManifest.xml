@@ -1,69 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.virtualcompanion">
 
+    <!-- Permissions must be here, outside <application> -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.VirtualCompanion"
-        tools:targetApi="31">
+        android:theme="@style/Theme.VirtualCompanion">
 
-        <!-- Opening / Launcher -->
         <activity
             android:name=".OpeningActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <!-- Main Flow -->
-        <activity
-            android:name=".CustomizeActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".MoodActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".MoodResultActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".QuestsActivity"
-            android:exported="false" />
-
-        <!-- Customization -->
-        <activity
-            android:name=".CustomTopActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".CustomBottomActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".CustomHatActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".CustomGlassesActivity"
-            android:exported="false" />
-
-        <!-- Settings -->
-        <activity
-            android:name=".SettingsActivity"
-            android:exported="false" />
+        <!-- Other activities -->
+        <activity android:name=".CustomizeActivity" />
+        <activity android:name=".MoodActivity" />
+        <activity android:name=".MoodResultActivity" />
+        <activity android:name=".QuestsActivity" />
+        <activity android:name=".QuestSessionActivity" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".CustomTopActivity" />
+        <activity android:name=".CustomBottomActivity" />
+        <activity android:name=".CustomHatActivity" />
+        <activity android:name=".CustomGlassesActivity" />
 
     </application>
 

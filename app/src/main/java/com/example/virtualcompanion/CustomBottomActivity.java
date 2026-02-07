@@ -15,6 +15,9 @@ public class CustomBottomActivity extends BaseActivity {
     private ImageView topLayer, bottomLayer, hatLayer, glassesLayer, petDisplay;
     private TextView equipButton;
     private TextView coinDisplay;
+    
+    // Category icons
+    private ImageView categoryIcon1, categoryIcon2, categoryIcon3, categoryIcon4;
 
     private int selectedPreview = 0; // what user clicked
     private int selectedPrice = 0;
@@ -44,6 +47,12 @@ public class CustomBottomActivity extends BaseActivity {
         equipButton = findViewById(R.id.equipButton);
         coinDisplay = findViewById(R.id.coinAmount);
         petDisplay = findViewById(R.id.petDisplay);
+        
+        // Category icons
+        categoryIcon1 = findViewById(R.id.categoryIcon1);
+        categoryIcon2 = findViewById(R.id.categoryIcon2);
+        categoryIcon3 = findViewById(R.id.categoryIcon3);
+        categoryIcon4 = findViewById(R.id.categoryIcon4);
 
         // ================= GENDER =================
 
@@ -106,18 +115,17 @@ public class CustomBottomActivity extends BaseActivity {
 
 
         String[] prices = {
-                "", "", "", "200", "200", "250"
+                " ", "0", "0", "200", "200", "250"
         };
 
         int[] priceValues = {
-                0, 0, 0, 200, 200, 250
+               0, 0, 0, 200, 200, 250
         };
 
         // Initialize free items (price = 0)
         InventoryManager.initDefaults(this, new int[]{
                 R.drawable.bottom_girl_flaredpants_1,
-                R.drawable.bottom_boy_denimpants_1,
-                R.drawable.bottom_girl_skirt_1
+                R.drawable.bottom_boy_denimpants_1
         });
 
 
@@ -148,6 +156,15 @@ public class CustomBottomActivity extends BaseActivity {
                 );
 
         recycler.setAdapter(adapter);
+        
+        // Lock in height after first layout so purchases don't shrink the list
+        recycler.post(() -> {
+            adapter.notifyDataSetChanged();
+            recycler.post(() -> {
+                int h = recycler.getHeight();
+                if (h > 0) recycler.setMinimumHeight(h);
+            });
+        });
 
 
         // ================= EQUIP BUTTON =================
@@ -161,7 +178,7 @@ public class CustomBottomActivity extends BaseActivity {
                 // PURCHASE
                 try {
                     int coins = DatabaseManager.get(this).getCoins();
-                    
+
                     if (coins >= selectedPrice) {
                         DatabaseManager.get(this).addCoins(-selectedPrice);
                         InventoryManager.addItem(this, selectedPreview);
@@ -183,12 +200,14 @@ public class CustomBottomActivity extends BaseActivity {
                 OutfitManager.setBottom(this, 0);
                 bottomLayer.setVisibility(View.GONE);
                 equipButton.setText("Equip");
+                updateCategoryIcons();
                 return;
             }
 
             // EQUIP
             OutfitManager.setBottom(this, selectedPreview);
             equipButton.setText("Unequip");
+            updateCategoryIcons();
         });
 
 
@@ -196,12 +215,66 @@ public class CustomBottomActivity extends BaseActivity {
 
         restoreAll();
 
-        // Update coin display
         updateCoinDisplay();
 
         // ================= UI =================
 
         setupUI();
+        updateCategoryIcons();
+    }
+
+
+    // ================= CATEGORY ICON UPDATES =================
+    
+    private void updateCategoryIcons() {
+        updateCategoryIcon(categoryIcon1, OutfitManager.getTop(this));
+        updateCategoryIcon(categoryIcon2, OutfitManager.getBottom(this));
+        updateCategoryIcon(categoryIcon3, OutfitManager.getHat(this));
+        updateCategoryIcon(categoryIcon4, OutfitManager.getGlasses(this));
+    }
+    
+    private void updateCategoryIcon(ImageView icon, int equippedResId) {
+        if (icon == null) return;
+        if (equippedResId == 0) return;
+        
+        int shopIcon = getShopIconForEquipped(equippedResId);
+        if (shopIcon != 0) {
+            icon.setImageResource(shopIcon);
+        }
+    }
+    
+    private int getShopIconForEquipped(int equippedResId) {
+        // Tops
+        if (equippedResId == R.drawable.top_boy_flannel_1) return R.drawable.top_boy_flannel;
+        if (equippedResId == R.drawable.top_girl_pink_1) return R.drawable.top_girl_pink;
+        if (equippedResId == R.drawable.top_boy_floral_1) return R.drawable.top_boy_floral;
+        if (equippedResId == R.drawable.top_girl_plaid_1) return R.drawable.top_girl_plaid;
+        if (equippedResId == R.drawable.top_boy_quarterzip_1) return R.drawable.top_boy_quarterzip;
+        if (equippedResId == R.drawable.top_girl_cardigan_1) return R.drawable.top_girl_cardigan;
+        if (equippedResId == R.drawable.top_boy_leather_1) return R.drawable.top_boy_leather;
+        if (equippedResId == R.drawable.top_girl_dress_1) return R.drawable.top_girl_dress;
+        if (equippedResId == R.drawable.top_boy_tuxedo_1) return R.drawable.top_boy_tuxedo;
+        
+        // Bottoms
+        if (equippedResId == R.drawable.bottom_girl_flaredpants_1) return R.drawable.bottom_girl_flaredpants;
+        if (equippedResId == R.drawable.bottom_boy_denimpants_1) return R.drawable.bottom_boy_denimpants;
+        if (equippedResId == R.drawable.bottom_girl_skirt_1) return R.drawable.bottom_girl_skirt;
+        if (equippedResId == R.drawable.bottom_boy_blackpants_1) return R.drawable.bottom_boy_blackpants;
+        if (equippedResId == R.drawable.bottom_boy_short_1) return R.drawable.bottom_boy_short;
+        
+        // Hats
+        if (equippedResId == R.drawable.hat_gang_1) return R.drawable.hat_gang;
+        if (equippedResId == R.drawable.hat_flower_1) return R.drawable.hat_flower;
+        if (equippedResId == R.drawable.hat_cowboy_1) return R.drawable.hat_cowboy;
+        if (equippedResId == R.drawable.hat_beach_1) return R.drawable.hat_beach;
+        
+        // Glasses
+        if (equippedResId == R.drawable.glasses_normal_1) return R.drawable.glasses_normal;
+        if (equippedResId == R.drawable.glasses_shades_1) return R.drawable.glasses_shades;
+        if (equippedResId == R.drawable.glasses_maloi_1) return R.drawable.glasses_maloi;
+        if (equippedResId == R.drawable.glasses_heart_1) return R.drawable.glasses_heart;
+        
+        return 0;
     }
 
 
@@ -246,7 +319,7 @@ public class CustomBottomActivity extends BaseActivity {
 
     private void updateEquipText() {
         if (equipButton == null) return;
-        
+
         int equipped = OutfitManager.getBottom(this);
 
         // Check if item is owned
@@ -271,7 +344,7 @@ public class CustomBottomActivity extends BaseActivity {
             } catch (Exception e) {
                 coinDisplay.setText("150");
             }
-            
+
             // CHEAT MODE: Long press to add 100 coins
             coinDisplay.setOnLongClickListener(v -> {
                 DatabaseManager.get(this).addCoins(100);
@@ -289,7 +362,6 @@ public class CustomBottomActivity extends BaseActivity {
 
         // Categories
         LinearLayout c1 = findViewById(R.id.categoryButton1);
-        LinearLayout c2 = findViewById(R.id.categoryButton2);
         LinearLayout c3 = findViewById(R.id.categoryButton3);
         LinearLayout c4 = findViewById(R.id.categoryButton4);
 
@@ -327,10 +399,10 @@ public class CustomBottomActivity extends BaseActivity {
 
         if (s != null) {
             s.setOnClickListener(v -> {
-                    startActivity(new Intent(
-                            this,
-                            SettingsActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(new Intent(
+                        this,
+                        SettingsActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
         }
 

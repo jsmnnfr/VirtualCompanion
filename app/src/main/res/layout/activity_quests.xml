@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <!-- Background Image - FULL SCREEN -->
+    <!-- Background Image -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/background_placeholder"
+        android:src="@drawable/bg_quest"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -29,122 +30,143 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Settings Icon - Top Left -->
-    <ImageView
-        android:id="@+id/settingsIcon"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:layout_margin="16dp"
-        android:background="@drawable/icon_bg"
-        android:clickable="true"
-        android:contentDescription="Settings"
-        android:elevation="8dp"
-        android:focusable="true"
-        android:padding="10dp"
-        android:src="@drawable/ic_settings"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="#FFFFFF" />
-
-    <!-- Coins Display - Top Right -->
+    <!-- Top Bar -->
     <LinearLayout
-        android:id="@+id/coinsDisplay"
-        android:layout_width="wrap_content"
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:background="@drawable/coin_display_bg"
-        android:elevation="8dp"
-        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:padding="16dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/coinAmount"
+        <!-- Settings Icon -->
+        <ImageView
+            android:id="@+id/settingsIcon"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/icon_bg"
+            android:clickable="true"
+            android:contentDescription="Settings"
+            android:focusable="true"
+            android:padding="10dp"
+            android:src="@drawable/ic_settings"
+            app:tint="#FFFFFF" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Coins Display -->
+        <LinearLayout
+            android:id="@+id/coinsDisplay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nunito_bold"
-            android:shadowColor="#CC000000"
-            android:shadowDx="0"
-            android:shadowDy="2"
-            android:shadowRadius="6"
-            android:text="150"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:background="@drawable/coin_display_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="6dp"
-            android:contentDescription="Coins"
-            android:src="@drawable/ic_coin" />
+            <TextView
+                android:id="@+id/coinAmount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nunito_bold"
+                android:shadowColor="#CC000000"
+                android:shadowDx="0"
+                android:shadowDy="2"
+                android:shadowRadius="6"
+                android:text="150"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="6dp"
+                android:contentDescription="Coins"
+                android:src="@drawable/ic_coin" />
+        </LinearLayout>
     </LinearLayout>
 
-    <!-- App Title - Responsive -->
+    <!-- App Title -->
     <TextView
         android:id="@+id/appTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
         android:text="ECHO"
-        android:textSize="60sp"
+        android:textSize="56sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:letterSpacing="0.03"
+        android:letterSpacing="0.05"
         android:fontFamily="@font/nunito_extrabold"
         android:shadowColor="#DD000000"
         android:shadowDx="0"
         android:shadowDy="4"
-        android:shadowRadius="12"
-        android:elevation="8dp"
-        app:autoSizeTextType="uniform"
-        app:autoSizeMinTextSize="40sp"
-        app:autoSizeMaxTextSize="60sp"
-        app:autoSizeStepGranularity="2sp"
-        app:layout_constraintTop_toBottomOf="@id/settingsIcon"
+        android:shadowRadius="10"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Quests Container - GLASS EFFECT WITHOUT VISIBLE BOX -->
+    <!-- Header Text - Centered with wrap_content -->
+    <TextView
+        android:id="@+id/headerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/nunito_bold"
+        android:shadowColor="#DD000000"
+        android:shadowDx="0"
+        android:shadowDy="3"
+        android:shadowRadius="8"
+        android:text="Find balance with these quests!"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/appTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Main Content Container - Wider than header -->
     <LinearLayout
         android:id="@+id/questsContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:background="@drawable/glass_button"
-        app:layout_constraintTop_toBottomOf="@id/appTitle"
+        app:layout_constraintTop_toBottomOf="@id/headerText"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.9">
 
-        <!-- Header Text - Responsive -->
+        <!-- Empty State Message -->
         <TextView
-            android:id="@+id/headerText"
+            android:id="@+id/emptyStateMessage"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="No quests available yet.\nCheck back tomorrow!"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
             android:fontFamily="@font/nunito_bold"
-            android:lineSpacingExtra="2dp"
+            android:lineSpacingExtra="4dp"
+            android:textAlignment="center"
             android:shadowColor="#DD000000"
             android:shadowDx="0"
-            android:shadowDy="5"
-            android:shadowRadius="8"
-            android:text="Brighten up your Mood with these Quests"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:autoSizeTextType="uniform"
-            app:autoSizeMinTextSize="16sp"
-            app:autoSizeMaxTextSize="20sp"
-            app:autoSizeStepGranularity="1sp" />
+            android:shadowDy="2"
+            android:shadowRadius="6"
+            android:alpha="0.8"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <!-- Quests List -->
         <androidx.recyclerview.widget.RecyclerView
@@ -153,11 +175,11 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="8dp" />
-
+            android:paddingBottom="16dp"
+            android:overScrollMode="never" />
     </LinearLayout>
 
-    <!-- Bottom Navigation - Always at bottom -->
+    <!-- Bottom Navigation -->
     <LinearLayout
         android:id="@+id/bottomNavigation"
         android:layout_width="0dp"
@@ -203,7 +225,6 @@
             android:clickable="true"
             android:focusable="true"
             app:tint="#B3FFFFFF" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,10 @@ package com.example.virtualcompanion;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 public class MoodResultActivity extends BaseActivity {
 
@@ -14,11 +14,11 @@ public class MoodResultActivity extends BaseActivity {
     };
 
     private static final String[] MOOD_MESSAGES = {
-            "It’s okay to feel steady today.",
-            "Great to see you feeling good today!",
-            "I know today feels heavy. You’re not alone.",
-            "Strong emotions are valid.",
-            "It’s okay to feel uneasy. I’ve got you."
+            "You’re doing your best, and that’s enough!",
+            "Happiness looks good on you. Keep it!",
+            "It’s okay to feel low. You're not alone.",
+            "Your feelings are loud, but you’re stronger.",
+            "Breathe. You’re safe. You’ve got this."
     };
 
     @Override
@@ -38,18 +38,18 @@ public class MoodResultActivity extends BaseActivity {
 
         int[] emotions = "male".equalsIgnoreCase(gender)
                 ? new int[]{
-                R.drawable.emote_neutral_b_moodresult,
-                R.drawable.emote_happy_b_moodresult,
-                R.drawable.emote_sad_b_moodresult,
-                R.drawable.emote_angry_b_moodresult,
-                R.drawable.emote_anxious_b_moodresult
+                R.drawable.emotion_neutral,
+                R.drawable.emotion_happy,
+                R.drawable.emotion_sad,
+                R.drawable.emotion_angry,
+                R.drawable.emotion_anxious
         }
                 : new int[]{
-                R.drawable.emote_neutral_g_moodresult,
-                R.drawable.emote_happy_g_moodresult,
-                R.drawable.emote_sad_g_moodresult,
-                R.drawable.emote_angry_g_moodresult,
-                R.drawable.emote_anxious_g_moodresult
+                R.drawable.emotion_neutral_g,
+                R.drawable.emotion_happy_g,
+                R.drawable.emotion_sad_g,
+                R.drawable.emotion_angry_g,
+                R.drawable.emotion_anxious_g
         };
 
         int[] overlays = "male".equalsIgnoreCase(gender)
@@ -140,7 +140,7 @@ public class MoodResultActivity extends BaseActivity {
                     DatabaseManager.get(this).addCoins(100);
                     int newCoins = DatabaseManager.get(this).getCoins();
                     coinAmount.setText(String.valueOf(newCoins));
-                    android.widget.Toast.makeText(this, "[DEV] +100 coins added", android.widget.Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "[DEV] +100 coins added", Toast.LENGTH_SHORT).show();
                     return true;
                 });
             }
@@ -159,12 +159,10 @@ public class MoodResultActivity extends BaseActivity {
         // Settings → SettingsActivity
         if (settingsIcon != null) {
             settingsIcon.setOnClickListener(v -> {
-
                 Intent intent = new Intent(
                         MoodResultActivity.this,
                         SettingsActivity.class
                 );
-
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
@@ -173,31 +171,25 @@ public class MoodResultActivity extends BaseActivity {
         // Home to MoodResultActivity
         if (navHome != null) {
             navHome.setOnClickListener(v -> {
-
                 Intent intent = new Intent(
                         MoodResultActivity.this,
                         MoodResultActivity.class
                 );
-
-                intent.putExtra("selected_mood",  finalMoodIndex);
-
+                intent.putExtra("selected_mood", finalMoodIndex);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
         }
 
-        // Quests → QuestsActivity
+        // ================= QUESTS BUTTON - ALWAYS ENABLED =================
         if (navTasks != null) {
+            navTasks.setAlpha(1.0f); // Always visible
             navTasks.setOnClickListener(v -> {
-
                 Intent intent = new Intent(
                         MoodResultActivity.this,
                         QuestsActivity.class
                 );
-
                 intent.putExtra("selected_mood", finalMoodIndex);
-
-
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
@@ -206,15 +198,11 @@ public class MoodResultActivity extends BaseActivity {
         // Customize → CustomTopActivity
         if (navCustomize != null) {
             navCustomize.setOnClickListener(v -> {
-
                 Intent intent = new Intent(
                         MoodResultActivity.this,
                         CustomTopActivity.class
                 );
-
                 intent.putExtra("selected_mood", finalMoodIndex);
-
-
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });

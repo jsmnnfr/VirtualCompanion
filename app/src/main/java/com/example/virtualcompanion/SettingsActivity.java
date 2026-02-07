@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SwitchCompat;
@@ -17,6 +18,7 @@ public class SettingsActivity extends BaseActivity {
 
     private boolean letterToastShown = false;
     private boolean maxToastShown = false;
+    private boolean isEditing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,8 @@ public class SettingsActivity extends BaseActivity {
         // ================= UI =================
 
         EditText petNameInput = findViewById(R.id.petNameInput);
+        ImageView editNameIcon = findViewById(R.id.editNameIcon);
+        LinearLayout nameInputContainer = findViewById(R.id.nameInputContainer);
         View boyButton = findViewById(R.id.boyButton);
         View girlButton = findViewById(R.id.girlButton);
         MaterialButton saveButton = findViewById(R.id.saveButton);
@@ -48,6 +52,58 @@ public class SettingsActivity extends BaseActivity {
         String[] currentGender = {db.getGender()};
 
         updateGenderButtonStates(boyButton, girlButton, currentGender[0]);
+
+
+        // ================= ENABLE EDITING METHOD =================
+
+        View.OnClickListener enableEditingListener = v -> {
+            if (!isEditing) {
+                // Enable editing
+                petNameInput.setFocusable(true);
+                petNameInput.setFocusableInTouchMode(true);
+                petNameInput.setCursorVisible(true);
+                petNameInput.setClickable(true);
+                petNameInput.requestFocus();
+
+                // Show keyboard
+                petNameInput.postDelayed(() -> {
+                    android.view.inputmethod.InputMethodManager imm =
+                            (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(petNameInput, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT);
+                }, 100);
+
+                isEditing = true;
+            } else {
+                // Disable editing
+                petNameInput.setFocusable(false);
+                petNameInput.setFocusableInTouchMode(false);
+                petNameInput.setCursorVisible(false);
+                petNameInput.setClickable(true); // Keep clickable to enable editing again
+                petNameInput.clearFocus();
+
+                // Hide keyboard
+                android.view.inputmethod.InputMethodManager imm =
+                        (android.view.inputmethod.InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(petNameInput.getWindowToken(), 0);
+
+                isEditing = false;
+            }
+        };
+
+
+        // ================= EDIT NAME ICON CLICK =================
+
+        editNameIcon.setOnClickListener(enableEditingListener);
+
+
+        // ================= NAME INPUT CONTAINER CLICK =================
+
+        nameInputContainer.setOnClickListener(enableEditingListener);
+
+
+        // ================= PET NAME INPUT CLICK =================
+
+        petNameInput.setOnClickListener(enableEditingListener);
 
 
         // ================= NAME VALIDATION =================

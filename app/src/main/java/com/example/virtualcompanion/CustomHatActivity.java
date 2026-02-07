@@ -17,6 +17,9 @@ public class CustomHatActivity extends BaseActivity {
 
     private TextView equipButton;
     private TextView coinDisplay;
+    
+    // Category icons
+    private ImageView categoryIcon1, categoryIcon2, categoryIcon3, categoryIcon4;
 
     // Preview
     private int selectedPreview = 0;
@@ -45,6 +48,12 @@ public class CustomHatActivity extends BaseActivity {
         equipButton = findViewById(R.id.equipButton);
         coinDisplay = findViewById(R.id.coinAmount);
         petDisplay = findViewById(R.id.petDisplay);
+        
+        // Category icons
+        categoryIcon1 = findViewById(R.id.categoryIcon1);
+        categoryIcon2 = findViewById(R.id.categoryIcon2);
+        categoryIcon3 = findViewById(R.id.categoryIcon3);
+        categoryIcon4 = findViewById(R.id.categoryIcon4);
 
         // ================= GENDER =================
 
@@ -106,7 +115,7 @@ public class CustomHatActivity extends BaseActivity {
 
         String[] prices = {
 
-                "",
+                " ",
                 "0",
                 "0",
                 "150",
@@ -155,6 +164,12 @@ public class CustomHatActivity extends BaseActivity {
 
         recyclerView.setAdapter(adapter);
 
+        // Lock in height after first layout so purchases don't shrink the list
+        recyclerView.post(() -> {
+            int h = recyclerView.getHeight();
+            if (h > 0) recyclerView.setMinimumHeight(h);
+        });
+
 
         // ================= EQUIP =================
 
@@ -167,7 +182,7 @@ public class CustomHatActivity extends BaseActivity {
                 // PURCHASE
                 try {
                     int coins = DatabaseManager.get(this).getCoins();
-                    
+
                     if (coins >= selectedPrice) {
                         DatabaseManager.get(this).addCoins(-selectedPrice);
                         InventoryManager.addItem(this, selectedPreview);
@@ -189,12 +204,14 @@ public class CustomHatActivity extends BaseActivity {
                 OutfitManager.setHat(this, 0);
                 hatLayer.setVisibility(View.GONE);
                 equipButton.setText("Equip");
+                updateCategoryIcons();
                 return;
             }
 
             // EQUIP
             OutfitManager.setHat(this, selectedPreview);
             equipButton.setText("Unequip");
+            updateCategoryIcons();
         });
 
 
@@ -202,7 +219,6 @@ public class CustomHatActivity extends BaseActivity {
 
         restoreAll();
 
-        // Update coin display
         updateCoinDisplay();
 
         // ================= UI =================
@@ -210,6 +226,61 @@ public class CustomHatActivity extends BaseActivity {
         setupCategories();
         setupSettings();
         setupBottomNav();
+        updateCategoryIcons();
+    }
+
+
+    // ================= CATEGORY ICON UPDATES =================
+    
+    private void updateCategoryIcons() {
+        updateCategoryIcon(categoryIcon1, OutfitManager.getTop(this));
+        updateCategoryIcon(categoryIcon2, OutfitManager.getBottom(this));
+        updateCategoryIcon(categoryIcon3, OutfitManager.getHat(this));
+        updateCategoryIcon(categoryIcon4, OutfitManager.getGlasses(this));
+    }
+    
+    private void updateCategoryIcon(ImageView icon, int equippedResId) {
+        if (icon == null) return;
+        if (equippedResId == 0) return;
+        
+        int shopIcon = getShopIconForEquipped(equippedResId);
+        if (shopIcon != 0) {
+            icon.setImageResource(shopIcon);
+        }
+    }
+    
+    private int getShopIconForEquipped(int equippedResId) {
+        // Tops
+        if (equippedResId == R.drawable.top_boy_flannel_1) return R.drawable.top_boy_flannel;
+        if (equippedResId == R.drawable.top_girl_pink_1) return R.drawable.top_girl_pink;
+        if (equippedResId == R.drawable.top_boy_floral_1) return R.drawable.top_boy_floral;
+        if (equippedResId == R.drawable.top_girl_plaid_1) return R.drawable.top_girl_plaid;
+        if (equippedResId == R.drawable.top_boy_quarterzip_1) return R.drawable.top_boy_quarterzip;
+        if (equippedResId == R.drawable.top_girl_cardigan_1) return R.drawable.top_girl_cardigan;
+        if (equippedResId == R.drawable.top_boy_leather_1) return R.drawable.top_boy_leather;
+        if (equippedResId == R.drawable.top_girl_dress_1) return R.drawable.top_girl_dress;
+        if (equippedResId == R.drawable.top_boy_tuxedo_1) return R.drawable.top_boy_tuxedo;
+        
+        // Bottoms
+        if (equippedResId == R.drawable.bottom_girl_flaredpants_1) return R.drawable.bottom_girl_flaredpants;
+        if (equippedResId == R.drawable.bottom_boy_denimpants_1) return R.drawable.bottom_boy_denimpants;
+        if (equippedResId == R.drawable.bottom_girl_skirt_1) return R.drawable.bottom_girl_skirt;
+        if (equippedResId == R.drawable.bottom_boy_blackpants_1) return R.drawable.bottom_boy_blackpants;
+        if (equippedResId == R.drawable.bottom_boy_short_1) return R.drawable.bottom_boy_short;
+        
+        // Hats
+        if (equippedResId == R.drawable.hat_gang_1) return R.drawable.hat_gang;
+        if (equippedResId == R.drawable.hat_flower_1) return R.drawable.hat_flower;
+        if (equippedResId == R.drawable.hat_cowboy_1) return R.drawable.hat_cowboy;
+        if (equippedResId == R.drawable.hat_beach_1) return R.drawable.hat_beach;
+        
+        // Glasses
+        if (equippedResId == R.drawable.glasses_normal_1) return R.drawable.glasses_normal;
+        if (equippedResId == R.drawable.glasses_shades_1) return R.drawable.glasses_shades;
+        if (equippedResId == R.drawable.glasses_maloi_1) return R.drawable.glasses_maloi;
+        if (equippedResId == R.drawable.glasses_heart_1) return R.drawable.glasses_heart;
+        
+        return 0;
     }
 
 
@@ -257,7 +328,7 @@ public class CustomHatActivity extends BaseActivity {
 
     private void updateEquipText() {
         if (equipButton == null) return;
-        
+
         int equipped = OutfitManager.getHat(this);
 
         // Check if item is owned
@@ -282,7 +353,7 @@ public class CustomHatActivity extends BaseActivity {
             } catch (Exception e) {
                 coinDisplay.setText("150");
             }
-            
+
             // CHEAT MODE: Long press to add 100 coins
             coinDisplay.setOnLongClickListener(v -> {
                 DatabaseManager.get(this).addCoins(100);
@@ -300,7 +371,6 @@ public class CustomHatActivity extends BaseActivity {
 
         LinearLayout cat1 = findViewById(R.id.categoryButton1);
         LinearLayout cat2 = findViewById(R.id.categoryButton2);
-        LinearLayout cat3 = findViewById(R.id.categoryButton3);
         LinearLayout cat4 = findViewById(R.id.categoryButton4);
 
 
@@ -342,10 +412,10 @@ public class CustomHatActivity extends BaseActivity {
 
         if (settings != null) {
             settings.setOnClickListener(v -> {
-                    startActivity(new Intent(
-                            this,
-                            SettingsActivity.class));
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                startActivity(new Intent(
+                        this,
+                        SettingsActivity.class));
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             });
         }
     }
@@ -365,9 +435,9 @@ public class CustomHatActivity extends BaseActivity {
                 intent.putExtra("selected_mood", moodIndex);
                 startActivity(intent);
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                });
+            });
 
-            }
+        }
 
         if (navQuests != null) {
             navQuests.setOnClickListener(v -> {

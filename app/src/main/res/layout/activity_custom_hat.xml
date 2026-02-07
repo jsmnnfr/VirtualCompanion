@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!-- Background Image - FULL SCREEN -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/background_placeholder"
+        android:src="@drawable/bg_main"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -134,10 +135,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
+                android:id="@+id/categoryIcon1"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
                 android:contentDescription="Tops"
-                android:src="@drawable/top_boy_flannel" />
+                android:src="@drawable/ic_category_empty" />
 
         </LinearLayout>
 
@@ -154,10 +157,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/categoryIcon2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
                 android:contentDescription="Bottoms"
-                android:src="@drawable/bottom_girl_flaredpants" />
+                android:src="@drawable/ic_category_empty" />
 
         </LinearLayout>
 
@@ -174,10 +179,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/categoryIcon3"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
                 android:contentDescription="Hats"
-                android:src="@drawable/hat_gang" />
+                android:src="@drawable/ic_category_empty" />
 
         </LinearLayout>
 
@@ -193,10 +200,12 @@
             android:orientation="vertical">
 
             <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/categoryIcon4"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:scaleType="centerCrop"
                 android:contentDescription="Glasses"
-                android:src="@drawable/glasses_normal" />
+                android:src="@drawable/ic_category_empty" />
 
         </LinearLayout>
 

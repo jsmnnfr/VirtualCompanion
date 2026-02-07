@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!-- Background Image - FULL SCREEN -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/background_placeholder"
+        android:src="@drawable/bg_main"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -216,19 +217,19 @@
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/hatLayer"
+            android:id="@+id/glassesLayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="Hat"
+            android:contentDescription="Glasses"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:visibility="gone" />
 
         <ImageView
-            android:id="@+id/glassesLayer"
+            android:id="@+id/hatLayer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:contentDescription="Glasses"
+            android:contentDescription="Hat"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             android:visibility="gone" />

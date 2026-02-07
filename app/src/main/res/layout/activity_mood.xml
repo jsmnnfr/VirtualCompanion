@@ -4,14 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <!-- Background Image - FULL SCREEN -->
     <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:src="@drawable/background_placeholder"
+        android:src="@drawable/bg_main"
         android:scaleType="centerCrop"
         android:contentDescription="Background"
         app:layout_constraintTop_toTopOf="parent"
@@ -110,28 +111,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Pet Image - Responsive with proper constraints -->
+    <!-- Pet Image - Adaptive with proper constraints -->
     <ImageView
         android:id="@+id/mainPetImage"
-        android:layout_width="422dp"
-        android:layout_height="398dp"
-        android:layout_marginTop="4dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
         android:contentDescription="Your Pet"
         android:elevation="6dp"
         android:scaleType="fitCenter"
-        app:layout_constraintDimensionRatio="H,1:0.9"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="1.02"
+        app:layout_constraintDimensionRatio="H,422:398"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appTitle"
-        app:layout_constraintWidth_percent="0.9" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintVertical_bias="0.4" />
 
     <!-- Mood Feedback Message (shown after completing quests) -->
     <TextView
         android:id="@+id/moodInfoMessage"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-50dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="8dp"
         android:elevation="8dp"
         android:fontFamily="@font/nunito_bold"
         android:shadowColor="#CC000000"
@@ -140,20 +143,25 @@
         android:shadowRadius="6"
         android:text="You completed all your tasks. How do you feel now?"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textAlignment="center"
         android:visibility="gone"
+        android:maxLines="2"
+        android:lineSpacingExtra="2dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMinTextSize="14sp"
+        app:autoSizeMaxTextSize="16sp"
+        app:autoSizeStepGranularity="1sp"
         app:layout_constraintTop_toBottomOf="@id/mainPetImage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
-    <!-- Mood Prompt - Overlays bottom of pet -->
+    <!-- Mood Prompt - Below pet (shown by default) -->
     <TextView
         android:id="@+id/moodPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp"
+        android:layout_marginTop="8dp"
         android:elevation="8dp"
         android:fontFamily="@font/nunito_bold"
         android:shadowColor="#CC000000"
@@ -170,12 +178,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mainPetImage" />
 
+    <!-- Barrier to handle whichever message is visible -->
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/messageBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="moodInfoMessage,moodPrompt" />
+
     <!-- Likert Scale Emoji Container - Properly Centered -->
     <LinearLayout
         android:id="@+id/emojiContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/emoji_container_bg"
         android:elevation="10dp"
         android:gravity="center"
@@ -184,9 +200,9 @@
         android:paddingVertical="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/moodPrompt">
+        app:layout_constraintTop_toBottomOf="@id/messageBarrier">
 
-        <!-- Very Sad - 1 -->
+        <!-- Neutral -->
         <ImageView
             android:id="@+id/emoji1"
             android:layout_width="48dp"
@@ -198,7 +214,7 @@
             android:focusable="true"
             android:src="@drawable/emoji_neutral_b" />
 
-        <!-- Sad - 2 -->
+        <!-- Happy -->
         <ImageView
             android:id="@+id/emoji2"
             android:layout_width="48dp"
@@ -210,7 +226,7 @@
             android:focusable="true"
             android:src="@drawable/emoji_happy_b" />
 
-        <!-- Neutral - 3 -->
+        <!-- Sad -->
         <ImageView
             android:id="@+id/emoji3"
             android:layout_width="48dp"
@@ -222,7 +238,7 @@
             android:focusable="true"
             android:src="@drawable/emoji_sad_b" />
 
-        <!-- Happy - 4 -->
+        <!-- Angry -->
         <ImageView
             android:id="@+id/emoji4"
             android:layout_width="48dp"
@@ -234,7 +250,7 @@
             android:focusable="true"
             android:src="@drawable/emoji_angry_b" />
 
-        <!-- Very Happy - 5 -->
+        <!-- Anxious -->
         <ImageView
             android:id="@+id/emoji5"
             android:layout_width="48dp"
@@ -253,7 +269,7 @@
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:background="@drawable/glass_button_selector"
         android:fontFamily="@font/nunito_bold"
         android:foreground="@drawable/button_click_effect"
@@ -278,7 +294,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emojiContainer"
-        app:layout_constraintVertical_bias="0.3"
+        app:layout_constraintVertical_bias="0.2"
         app:strokeColor="#EEFFFFFF"
         app:strokeWidth="2dp" />
 

@@ -10,22 +10,29 @@ public class Quest {
     private boolean rewarded;
     private int iconResId;
     private String mood;
+    private int timerMinutes; // NEW: Timer duration in minutes
 
-    // Full constructor
-    public Quest(int id, String title, String description, int reward, String mood, int iconResId) {
+    // Full constructor with timer
+    public Quest(int id, String title, String description, int reward, String mood, int iconResId, int timerMinutes) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.reward = reward;
         this.iconResId = iconResId;
         this.mood = mood;
+        this.timerMinutes = timerMinutes;
         this.progress = 0;
         this.rewarded = false;
     }
 
-    // Constructor with default icon
+    // Constructor with timer, default icon
+    public Quest(int id, String title, String description, int reward, String mood, int timerMinutes) {
+        this(id, title, description, reward, mood, R.drawable.ic_quests, timerMinutes);
+    }
+
+    // Constructor with default icon and timer
     public Quest(int id, String title, String description, int reward, String mood) {
-        this(id, title, description, reward, mood, R.drawable.ic_quests);
+        this(id, title, description, reward, mood, R.drawable.ic_quests, 5); // Default 5 minutes
     }
 
     // ================= GETTERS & SETTERS =================
@@ -92,5 +99,13 @@ public class Quest {
 
     public void setMood(String mood) {
         this.mood = mood;
+    }
+
+    public int getTimerMinutes() {
+        return timerMinutes;
+    }
+
+    public void setTimerMinutes(int timerMinutes) {
+        this.timerMinutes = timerMinutes;
     }
 }

@@ -24,7 +24,7 @@ public class InventoryManager {
      */
     public static boolean isOwned(Context c, int resId) {
         if (resId == 0) return true; // Empty slot is always "owned"
-        
+
         Set<String> owned = getPrefs(c).getStringSet(KEY_OWNED_ITEMS, new HashSet<>());
         return owned.contains(String.valueOf(resId));
     }
@@ -34,7 +34,7 @@ public class InventoryManager {
      */
     public static void addItem(Context c, int resId) {
         Set<String> owned = new HashSet<>(
-            getPrefs(c).getStringSet(KEY_OWNED_ITEMS, new HashSet<>())
+                getPrefs(c).getStringSet(KEY_OWNED_ITEMS, new HashSet<>())
         );
         owned.add(String.valueOf(resId));
         getPrefs(c).edit().putStringSet(KEY_OWNED_ITEMS, owned).apply();

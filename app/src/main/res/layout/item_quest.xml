@@ -4,10 +4,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFEEE5">
+    app:cardCornerRadius="20dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="#FCE0C3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,21 +17,30 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Quest Info Row -->
+        <!-- Header Row -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical">
 
-            <!-- Quest Icon -->
-            <ImageView
-                android:id="@+id/questIcon"
+            <!-- Icon -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_quests"
-                android:contentDescription="Quest Icon" />
+                android:layout_marginEnd="12dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="#8B6F47">
+
+                <ImageView
+                    android:id="@+id/questIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_quests"
+                    android:contentDescription="Quest Icon" />
+            </androidx.cardview.widget.CardView>
 
             <!-- Title + Description -->
             <LinearLayout
@@ -42,74 +53,95 @@
                     android:id="@+id/questTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
                     android:text="Quest Title"
-                    android:textColor="#2C2C2C"
+                    android:textColor="#3E2723"
                     android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
 
                 <TextView
                     android:id="@+id/questDescription"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:ellipsize="end"
-                    android:maxLines="3"
-                    android:text="Quest Description goes here"
-                    android:textColor="#6C6C6C"
+                    android:maxLines="1"
+                    android:text="Quest Description"
+                    android:textColor="#6D4C41"
                     android:textSize="12sp" />
             </LinearLayout>
 
             <!-- Reward -->
-            <LinearLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_marginStart="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="#D4A574">
 
-                <TextView
-                    android:id="@+id/questReward"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="+50"
-                    android:textColor="#2C2C2C"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_coin"
-                    android:contentDescription="Coin Icon" />
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_marginEnd="4dp"
+                        android:src="@drawable/ic_coin"
+                        android:contentDescription="Coin" />
+
+                    <TextView
+                        android:id="@+id/questReward"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="+50"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
 
         <!-- Progress Bar -->
-        <ProgressBar
-            android:id="@+id/questProgressBar"
-            style="@android:style/Widget.ProgressBar.Horizontal"
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:max="100"
-            android:progress="0"
-            android:progressTint="#4CAF50"
-            android:backgroundTint="#DDDDDD" />
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="#E5D4C1">
 
-        <!-- Complete Quest Button -->
+            <ProgressBar
+                android:id="@+id/questProgressBar"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:max="100"
+                android:progress="0"
+                android:progressTint="#7CB342"
+                android:progressBackgroundTint="@android:color/transparent" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Complete Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/markDoneBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:minHeight="45dp"
+            android:minHeight="48dp"
             android:text="Complete Quest"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:cornerRadius="20dp"
-            app:strokeWidth="2dp"
-            android:backgroundTint="#4CAF50"/>
+            app:cornerRadius="24dp"
+            android:backgroundTint="#7CB342" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

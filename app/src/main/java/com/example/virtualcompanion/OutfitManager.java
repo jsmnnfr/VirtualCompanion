@@ -18,6 +18,13 @@ public class OutfitManager {
     }
 
 
+    // ================= RESET (for testing) =================
+
+    public static void resetAll(Context context) {
+        getPrefs(context).edit().clear().apply();
+    }
+
+
     // ================= TOP =================
 
     public static void setTop(Context c, int resId) {
